@@ -30,7 +30,7 @@ public class userServiceImplements implements userService{
 		try {
 			sSql.append(" SELECT * ")
 			.append(" FROM usuario ")
-			.append(" WHERE IDENTIFICACIONUSUARIO = ? ");
+			.append(" WHERE IDENTIFICACION = ? ");
 			
 			pStm = connection.prepareStatement(sSql.toString());
 			
@@ -41,7 +41,7 @@ public class userServiceImplements implements userService{
 			rSet = pStm.executeQuery();
 			
 			if(rSet.next()) {
-				if(rSet.getString("identificacionUsuario").equals(identificacion) && rSet.getString("contrasena").equals(password)) {
+				if(rSet.getString("identificacion").equals(identificacion) && rSet.getString("password").equals(password)) {
 					ingreso = 1;
 				}else {
 					ingreso = 0;
