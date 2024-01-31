@@ -18,7 +18,7 @@ import javax.validation.constraints.NotNull;
 public class usuario {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int identificador;
+	private int idUsuario;
 	
 	@Column(unique = true)
 	private String identificacion;
@@ -51,17 +51,17 @@ public class usuario {
 	}
 
 	/**
-	 * @return the identificador
+	 * @return the idUsuario
 	 */
-	public int getIdentificador() {
-		return identificador;
+	public int getIdUsuario() {
+		return idUsuario;
 	}
 
 	/**
 	 * @param idUsuario the idUsuario to set
 	 */
-	public void setIdentificador(int identificador) {
-		this.identificador = identificador;
+	public void setIdUsuario(int idUsuario) {
+		this.idUsuario = idUsuario;
 	}
 
 	/**
@@ -192,7 +192,7 @@ public class usuario {
 
 	@Override
 	public String toString() {
-		return "usuario [identificador=" + identificador + ", identificacion=" + identificacion + ", nombres="
+		return "usuario [id=" + idUsuario + ", identificacion=" + identificacion + ", nombres="
 				+ nombres + ", apellidos=" + apellidos + ", telefono=" + telefono + ", direccion=" + direccion
 				+ ", ciudad=" + ciudad + ", email=" + email + ", contrasena=" + password + ", roles=" + roles + "]";
 	}

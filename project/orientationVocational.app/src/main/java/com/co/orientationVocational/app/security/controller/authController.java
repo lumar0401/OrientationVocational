@@ -18,11 +18,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.co.orientationVocational.app.security.dto.jwtDto;
 import com.co.orientationVocational.app.security.dto.loginUsuario;
+import com.co.orientationVocational.app.security.dto.nuevoUsuario;
+import com.co.orientationVocational.app.security.entity.rol;
+import com.co.orientationVocational.app.security.entity.usuario;
+import com.co.orientationVocational.app.security.enums.rolNombre;
 import com.co.orientationVocational.app.security.jwt.JwtProvider;
 import com.co.orientationVocational.app.security.service.rolService;
 import com.co.orientationVocational.app.security.service.usuarioService;
 
 import com.co.orientationVocational.app.business.Mensajes;
+
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.validation.Valid;
 
@@ -44,6 +51,27 @@ public class authController {
     
     @Autowired
     JwtProvider jwtprovider;
+    
+    @PostMapping("/nuevo")
+    public ResponseEntity<?> nuevo(@Valid @RequestBody nuevoUsuario nuevoUsuario, BindingResult bindingResult){
+        if(bindingResult.hasErrors())
+            return new ResponseEntity(new Mensajes("Email Inválido"), HttpStatus.BAD_REQUEST);
+        if(usuarioservice.existsByIdentificacion(nuevoUsuario.getIdentificacion()))
+            return new ResponseEntity(new Mensajes("Identificacion ya existe"), HttpStatus.BAD_REQUEST);
+        if(usuarioservice.existsByEmail(nuevoUsuario.getEmail()))
+            return new ResponseEntity(new Mensajes("Email ya existe"), HttpStatus.BAD_REQUEST);
+        usuario usuarioNew =
+                new usuario(nuevoUsuario.getIdentificacion(), nuevoUsuario.getNombres(), nuevoUsuario.getApellidos(),
+                        nuevoUsuario.getTelefono(), nuevoUsuario.getDireccion(), nuevoUsuario.getCiudad(),
+                        nuevoUsuario.getEmail(), passwordEncoder.encode(nuevoUsuario.getPassword()));
+        Set<rol> roles = new HashSet<>();
+        roles.add(rolservice.getByNombre(rolNombre.ROLE_USER).get());
+        if(nuevoUsuario.getRoles().contains("admin"))
+            roles.add(rolservice.getByNombre(rolNombre.ROLE_ADMIN).get());
+        usuarioNew.setRoles(roles);
+        usuarioservice.save(usuarioNew);
+        return new ResponseEntity(new Mensajes("Usuario guardado"), HttpStatus.CREATED);
+    }
     
     @PostMapping("/login")
     public ResponseEntity<jwtDto> login(@Valid @RequestBody loginUsuario loginUsuario, BindingResult bindingResult){
