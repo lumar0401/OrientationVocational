@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 public class rol {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int identificador;
+	private int idRol;
 	
 	@NotNull
 	@Enumerated(EnumType.STRING)
@@ -22,17 +22,17 @@ public class rol {
 	}
 
 	/**
-	 * @return the identificador
+	 * @return the idRol
 	 */
-	public int getIdentificador() {
-		return identificador;
+	public int getIdRol() {
+		return idRol;
 	}
 
 	/**
-	 * @param idRol the identificador to set
+	 * @param idRol the idRol to set
 	 */
-	public void setIdentificador(int identificador) {
-		this.identificador = identificador;
+	public void setIdRol(int idRol) {
+		this.idRol = idRol;
 	}
 
 	/**
