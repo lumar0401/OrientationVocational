@@ -13,9 +13,9 @@ public class userController {
 	@Autowired
 	private userService userservice;
 	
-	@GetMapping("usuarios/{identificacion}/{password}")
-	public int userLogin(@PathVariable("identificacion") String identificacionI, @PathVariable("password") String passwordI) {
-		int ingresoExitoso = userservice.loginValidation(identificacionI, passwordI);
+	@GetMapping("usuarios/{identificacion}")
+	public int userLogin(@PathVariable("identificacion") String identificacionI) {
+		int ingresoExitoso = userservice.loginValidation(identificacionI);
 		
 		if(ingresoExitoso == 0) {
 			return 0;
