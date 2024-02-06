@@ -20,7 +20,7 @@ public class userServiceImplements implements userService{
 	}
 	
 	@Override
-	public int loginValidation(String identificacion, String password) {
+	public int loginValidation(String identificacion) {
 		StringBuilder sSql = new StringBuilder();
 		PreparedStatement pStm = null;
 		ResultSet rSet = null;
@@ -41,7 +41,7 @@ public class userServiceImplements implements userService{
 			rSet = pStm.executeQuery();
 			
 			if(rSet.next()) {
-				if(rSet.getString("identificacion").equals(identificacion) && rSet.getString("password").equals(password)) {
+				if(rSet.getString("identificacion").equals(identificacion)) {
 					ingreso = 1;
 				}else {
 					ingreso = 0;
