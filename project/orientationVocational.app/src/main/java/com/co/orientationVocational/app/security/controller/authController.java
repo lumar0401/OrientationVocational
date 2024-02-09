@@ -10,6 +10,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -85,7 +86,7 @@ public class authController {
         return new ResponseEntity(jwtDto, HttpStatus.OK);
     }
     
-    @PostMapping("/obtain/{id}")
+    @GetMapping("/obtain/{id}")
     public ResponseEntity<usuario> getByIdentificacion(@PathVariable("id") String identificacion){
     	if(!usuarioservice.existsByIdentificacion(identificacion))
 			return new ResponseEntity(new Mensajes("Usuario no existe"), HttpStatus.NOT_FOUND);
