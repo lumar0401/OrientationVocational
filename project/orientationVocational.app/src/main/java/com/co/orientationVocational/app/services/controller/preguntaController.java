@@ -22,7 +22,6 @@ import javax.validation.constraints.NotNull;
 
 @RestController
 @RequestMapping("/pregunta")
-@CrossOrigin(origins = "*")
 public class preguntaController extends utils {
 	
 	@Autowired

@@ -4,7 +4,6 @@ import java.util.LinkedList;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,7 +16,6 @@ import com.co.orientationVocational.app.services.dto.chasideQuestionDto;
 
 @RestController
 @RequestMapping("/test-chaside")
-@CrossOrigin(origins = "*")
 public class testChasideController extends utils {
 	
 	@PostMapping("/result")

@@ -10,7 +10,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,7 +35,6 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/auth")
-@CrossOrigin
 public class authController {
 	@Autowired
     PasswordEncoder passwordEncoder;
@@ -84,5 +83,15 @@ public class authController {
         UserDetails userDetails = (UserDetails)authentication.getPrincipal();
         jwtDto jwtDto = new jwtDto(jwt, userDetails.getUsername(), userDetails.getAuthorities());
         return new ResponseEntity(jwtDto, HttpStatus.OK);
+    }
+    
+    @PostMapping("/obtain/{id}")
+    public ResponseEntity<usuario> getByIdentificacion(@PathVariable("id") String identificacion){
+    	if(!usuarioservice.existsByIdentificacion(identificacion))
+			return new ResponseEntity(new Mensajes("Usuario no existe"), HttpStatus.NOT_FOUND);
+    	
+    	usuario usuarioEncontrado = usuarioservice.getByIdentificacion(identificacion).get();
+    	
+    	return new ResponseEntity(usuarioEncontrado, HttpStatus.OK);
     }
 }
