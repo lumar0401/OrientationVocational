@@ -6,8 +6,6 @@ import java.util.LinkedList;
 import org.apache.pdfbox.pdmodel.encryption.InvalidPasswordException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,7 +17,6 @@ import com.co.orientationVocational.app.services.dto.icfesPdfDto;
 
 @RestController
 @RequestMapping("/icfes")
-@CrossOrigin(origins = "*")
 public class icfesPdfController {
 	
 	@PostMapping("/pdf")
