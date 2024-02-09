@@ -11,28 +11,26 @@ import org.apache.pdfbox.text.PDFTextStripper;
 
 import com.co.orientationVocational.app.business.utils;
 import com.co.orientationVocational.app.data.evidenceModel;
+import com.co.orientationVocational.app.data.icfesUsuario;
 
 public class icfesPdf extends utils {
 
-	private static String asignaturaTemp;
+	public icfesPdf() {}
 
-	public icfesPdf() {
-	}
-
-	public LinkedList<evidenceModel> gestionArchivo(String rutaArchivo, String identificacion)
-			throws InvalidPasswordException, IOException {
+	public icfesUsuario gestionArchivo(String rutaArchivo, String identificacion) throws InvalidPasswordException, IOException {
 		LinkedList<evidenceModel> listPrueba = new LinkedList<evidenceModel>();
+		icfesUsuario result = new icfesUsuario();
 		boolean existe = existFile(rutaArchivo);
 
 		if (existe && !esVacio(identificacion)) {
 			try {
-				obtenerInfoPdf(rutaArchivo, identificacion, listPrueba);
+				obtenerInfoPdf(rutaArchivo, identificacion, result);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
 
-		return listPrueba;
+		return result;
 	}
 
 	private boolean existFile(String rutaArchivo) {
@@ -45,7 +43,7 @@ public class icfesPdf extends utils {
 		}
 	}
 
-	private static void obtenerInfoPdf(String ruta, String identificacion, LinkedList<evidenceModel> listPruebas)
+	private static void obtenerInfoPdf(String ruta, String identificacion, icfesUsuario result)
 			throws InvalidPasswordException, IOException {
 		PDDocument documento = PDDocument.load(new File(ruta));
 		String[] lineasXPage = new String[] {};
@@ -69,9 +67,11 @@ public class icfesPdf extends utils {
 			if (posicion != -1) {
 				lineasXPage = obtenerDatosPdf(texto);
 
+				obtenerInfoAdicional(identificacion, lineasXPage, result);
+				
 				obtenerLineas(lineasXPage, arregloXLineas);
 
-				obtenerResultados(arregloXLineas, listPruebas);
+				obtenerResultados(arregloXLineas, result);
 			}
 
 			documento.close();
@@ -94,6 +94,44 @@ public class icfesPdf extends utils {
 		lineaPage = texto.split("\\r?\\n");
 
 		return lineaPage;
+	}
+
+	private static void obtenerInfoAdicional(String identificacion, String[] lineasXPage, icfesUsuario result) {
+		String[] arregloInfo = new String[] {};
+		int contador = 0;
+		
+		for (String string : lineasXPage) {
+			if (string.contains("Fecha de Examen")) {
+				arregloInfo = string.split(" ");
+				result.setFechaExamen(arregloInfo[3] + " " + arregloInfo[4] + " " + arregloInfo[5] + " " + arregloInfo[6] + " " + arregloInfo[7]);
+				Arrays.fill(arregloInfo, "");
+			} else if (string.contains(identificacion)){
+				arregloInfo = string.split(" ");
+				result.setRegistroExamen(arregloInfo[0]);				
+				obtenerNombre(arregloInfo, result);
+				result.setIdentificacionUsuario(arregloInfo[(arregloInfo.length - 1)]);
+				Arrays.fill(arregloInfo, "");
+			} else if(string.contains("Puntaje")) {
+				contador = 1;
+				continue;
+			} else if(contador == 1) {
+				arregloInfo = string.split(" ");
+				
+				result.setPuntajeGlobal(Integer.valueOf(arregloInfo[1]));
+				
+				break;
+			}
+		}
+	}
+	
+	private static void obtenerNombre(String[] arregloInfo, icfesUsuario result) {
+		String nombre = "";
+		
+		for (int i = 1; i < (arregloInfo.length - 2); i++) {
+			nombre = nombre + " " + arregloInfo[i];
+		}
+		
+		result.setNombreEstudiante(nombre);
 	}
 
 	private static void obtenerLineas(String[] texto, String[] arregloXLineas) {
@@ -133,56 +171,59 @@ public class icfesPdf extends utils {
 		}
 	}
 
-	private static void obtenerResultados(String[] arregloXLineas, LinkedList<evidenceModel> listPruebas) {
-		evidenceModel[] evidenceModels = new evidenceModel[arregloXLineas.length - 1];
+	private static void obtenerResultados(String[] arregloXLineas, icfesUsuario result) {
+		evidenceModel[] evidenceModels = new evidenceModel[arregloXLineas.length];
+		LinkedList<evidenceModel> listPruebas = new LinkedList<evidenceModel>();
 		String[] arregloTemp = new String[] {};
 
-		for (int i = 1; i < arregloXLineas.length; i++) {
+		for (int i = 0; i < arregloXLineas.length; i++) {
 			arregloTemp = arregloXLineas[i].split(" ");
 
-			evidenceModels[i - 1] = new evidenceModel();
+			evidenceModels[i] = new evidenceModel();
 
 			asignaturas asignaturaTemp = asignaturas.valueOf(arregloTemp[0]);
 			
 			if(asignaturas.LECTURA.equals(asignaturaTemp)) {
-				evidenceModels[i - 1].setPrueba(arregloTemp[0] + " " + arregloTemp[1]);
-				evidenceModels[i - 1].setPuntaje(arregloTemp[2]);
-				evidenceModels[i - 1].setNivel("");
-				evidenceModels[i - 1].setDecil((arregloTemp[3] != null) ? arregloTemp[3] : "");
+				evidenceModels[i].setPrueba(arregloTemp[0] + " " + arregloTemp[1]);
+				evidenceModels[i].setPuntaje(arregloTemp[2]);
+				evidenceModels[i].setNivel("");
+				evidenceModels[i].setDecil((arregloTemp[3] != null) ? arregloTemp[3] : "");
 			}else if(asignaturas.MATEMÁTICAS.equals(asignaturaTemp)) {
-				evidenceModels[i - 1].setPrueba(arregloTemp[0]);
-				evidenceModels[i - 1].setPuntaje(arregloTemp[1]);
-				evidenceModels[i - 1].setNivel("");
-				evidenceModels[i - 1].setDecil((arregloTemp[2] != null) ? arregloTemp[2] : "");
+				evidenceModels[i].setPrueba(arregloTemp[0]);
+				evidenceModels[i].setPuntaje(arregloTemp[1]);
+				evidenceModels[i].setNivel("");
+				evidenceModels[i].setDecil((arregloTemp[2] != null) ? arregloTemp[2] : "");
 			}else if(asignaturas.SOCIALES.equals(asignaturaTemp)) {
-				evidenceModels[i - 1].setPrueba(arregloTemp[0] + " " + arregloTemp[1] + " " + arregloTemp[2]);
-				evidenceModels[i - 1].setPuntaje(arregloTemp[3]);
-				evidenceModels[i - 1].setNivel("");
-				evidenceModels[i - 1].setDecil((arregloTemp[4] != null) ? arregloTemp[4] : "");
+				evidenceModels[i].setPrueba(arregloTemp[0] + " " + arregloTemp[1] + " " + arregloTemp[2]);
+				evidenceModels[i].setPuntaje(arregloTemp[3]);
+				evidenceModels[i].setNivel("");
+				evidenceModels[i].setDecil((arregloTemp[4] != null) ? arregloTemp[4] : "");
 			} else if(asignaturas.CIENCIAS.equals(asignaturaTemp)) {
-				evidenceModels[i - 1].setPrueba(arregloTemp[0] + " " + arregloTemp[1]);
-				evidenceModels[i - 1].setPuntaje(arregloTemp[2]);
-				evidenceModels[i - 1].setNivel("");
-				evidenceModels[i - 1].setDecil((arregloTemp[3] != null) ? arregloTemp[3] : "");
+				evidenceModels[i].setPrueba(arregloTemp[0] + " " + arregloTemp[1]);
+				evidenceModels[i].setPuntaje(arregloTemp[2]);
+				evidenceModels[i].setNivel("");
+				evidenceModels[i].setDecil((arregloTemp[3] != null) ? arregloTemp[3] : "");
 			} else if(asignaturas.INGLÉS.equals(asignaturaTemp)) {
-				evidenceModels[i - 1].setPrueba(arregloTemp[0]);
-				evidenceModels[i - 1].setPuntaje(arregloTemp[1]);
-				evidenceModels[i - 1].setNivel((arregloTemp[2] != null) ? arregloTemp[2] : "");
-				evidenceModels[i - 1].setDecil(arregloTemp[3].toString());
+				evidenceModels[i].setPrueba(arregloTemp[0]);
+				evidenceModels[i].setPuntaje(arregloTemp[1]);
+				evidenceModels[i].setNivel((arregloTemp[2] != null) ? arregloTemp[2] : "");
+				evidenceModels[i].setDecil(arregloTemp[3].toString());
 			} else if(asignaturas.RAZONAMIENTO.equals(asignaturaTemp)) {
-				evidenceModels[i - 1].setPrueba(arregloTemp[0] + " " + arregloTemp[1]);
-				evidenceModels[i - 1].setPuntaje(arregloTemp[2]);
-				evidenceModels[i - 1].setNivel("");
-				evidenceModels[i - 1].setDecil((arregloTemp[3] != null) ? arregloTemp[3] : "");
+				evidenceModels[i].setPrueba(arregloTemp[0] + " " + arregloTemp[1]);
+				evidenceModels[i].setPuntaje(arregloTemp[2]);
+				evidenceModels[i].setNivel("");
+				evidenceModels[i].setDecil((arregloTemp[3] != null) ? arregloTemp[3] : "");
 			} else if(asignaturas.COMPETENCIAS.equals(asignaturaTemp)) {
-				evidenceModels[i - 1].setPrueba(arregloTemp[0] + " " + arregloTemp[1]);
-				evidenceModels[i - 1].setPuntaje(arregloTemp[2]);
-				evidenceModels[i - 1].setNivel("");
-				evidenceModels[i - 1].setDecil((arregloTemp[3] != null) ? arregloTemp[3] : "");
+				evidenceModels[i].setPrueba(arregloTemp[0] + " " + arregloTemp[1]);
+				evidenceModels[i].setPuntaje(arregloTemp[2]);
+				evidenceModels[i].setNivel("");
+				evidenceModels[i].setDecil((arregloTemp[3] != null) ? arregloTemp[3] : "");
 			}  
 			
-			listPruebas.add(evidenceModels[i - 1]);
+			listPruebas.add(evidenceModels[i]);
 		}
+		
+		result.setListaMaterias(listPruebas);
 	}
 	
 	public enum asignaturas {
