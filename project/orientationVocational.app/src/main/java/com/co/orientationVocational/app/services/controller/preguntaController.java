@@ -93,9 +93,6 @@ public class preguntaController extends utils {
 		if(preguntaSer.existsByDescripcionPregunta(question.getDescripcionPregunta()) && preguntaSer.getByNombre(question.getDescripcionPregunta()).get().getId() != id)
             return new ResponseEntity(new Mensajes("Pregunta ya existe"), HttpStatus.BAD_REQUEST);
 		
-//        if(StringUtils.isBlank(question.getDescripcionPregunta()))
-//            return new ResponseEntity(new Mensajes("La descripcion de la pregunta es obligatoria"), HttpStatus.BAD_REQUEST);
-		
 		pregunta preguntaActualizada = preguntaSer.getOne(id).get();
 		
 		if(!esVacio(question.getDescripcionPregunta())) {
