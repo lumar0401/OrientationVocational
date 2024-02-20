@@ -50,7 +50,7 @@ public class userServiceImplements implements userService{
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
-		} 
+		}
 		
 		return ingreso;
 	}

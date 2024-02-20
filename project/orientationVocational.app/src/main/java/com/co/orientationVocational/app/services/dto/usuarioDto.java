@@ -1,14 +1,9 @@
-package com.co.orientationVocational.app.security.dto;
-
-import java.util.HashSet;
-import java.util.Set;
+package com.co.orientationVocational.app.services.dto;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
-public class nuevoUsuario {
-	@NotBlank
-	private String identificacion;
+public class usuarioDto {
 	
     @NotBlank
 	private String telefono;
@@ -17,29 +12,32 @@ public class nuevoUsuario {
 	@Email
 	private String email;
 	 
+	@NotBlank 
+	private String nombres; 
+	
 	@NotBlank
-	private String password;
-	 
-	private String nombres;
 	private String apellidos;
-	private String direccion;
+	
+	@NotBlank
+	private String direccion; 
+	
+	@NotBlank
 	private String ciudad;
+
+	@NotBlank
 	private String genero;
 	
-	private Set<String> roles = new HashSet<>();
+	public usuarioDto() {}
 
-	/**
-	 * @return the identificacion
-	 */
-	public String getIdentificacion() {
-		return identificacion;
-	}
-
-	/**
-	 * @param identificacion the identificacion to set
-	 */
-	public void setIdentificacion(String identificacion) {
-		this.identificacion = identificacion;
+	public usuarioDto(@NotBlank String telefono, @NotBlank @Email String email, @NotBlank String nombres, 
+			@NotBlank String apellidos, @NotBlank String direccion, @NotBlank String ciudad, @NotBlank String genero) {
+		this.telefono = telefono;
+		this.email = email;
+		this.nombres = nombres;
+		this.apellidos = apellidos;
+		this.direccion = direccion;
+		this.ciudad = ciudad;
+		this.genero = genero;
 	}
 
 	/**
@@ -68,20 +66,6 @@ public class nuevoUsuario {
 	 */
 	public void setEmail(String email) {
 		this.email = email;
-	}
-
-	/**
-	 * @return the password
-	 */
-	public String getPassword() {
-		return password;
-	}
-
-	/**
-	 * @param password the password to set
-	 */
-	public void setPassword(String password) {
-		this.password = password;
 	}
 
 	/**
@@ -138,20 +122,6 @@ public class nuevoUsuario {
 	 */
 	public void setCiudad(String ciudad) {
 		this.ciudad = ciudad;
-	}
-
-	/**
-	 * @return the roles
-	 */
-	public Set<String> getRoles() {
-		return roles;
-	}
-
-	/**
-	 * @param roles the roles to set
-	 */
-	public void setRoles(Set<String> roles) {
-		this.roles = roles;
 	}
 
 	/**

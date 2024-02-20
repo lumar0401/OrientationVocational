@@ -18,11 +18,12 @@ public class pregunta {
 	private String opcion4;
 	private String respuesta1;
 	private String respuesta2;
+	private String tipoTest;
 	
 	public pregunta() {}
 	
 	public pregunta(String descripcionPregunta, String opcion1, String opcion2, String opcion3, String opcion4,
-			String respuesta1, String respuesta2) {
+			String respuesta1, String respuesta2, String tipoTest) {
 		this.descripcionPregunta = descripcionPregunta;
 		this.opcion1 = opcion1;
 		this.opcion2 = opcion2;
@@ -30,6 +31,7 @@ public class pregunta {
 		this.opcion4 = opcion4;
 		this.respuesta1 = respuesta1;
 		this.respuesta2 = respuesta2;
+		this.tipoTest = tipoTest;
 	}
 
 	/**
@@ -143,4 +145,18 @@ public class pregunta {
 	public void setRespuesta2(String respuesta2) {
 		this.respuesta2 = respuesta2;
 	}
+
+	/**
+	 * @return the tipoTest
+	 */
+	public String getTipoTest() {
+		return tipoTest;
+	}
+
+	/**
+	 * @param tipoTest the tipoTest to set
+	 */
+	public void setTipoTest(String tipoTest) {
+		this.tipoTest = tipoTest;
+	}	
 }

@@ -12,4 +12,5 @@ public interface usuarioRepository extends JpaRepository<usuario, Integer> {
 	Optional<usuario> findByIdentificacion(String identificacion);
 	boolean existsByIdentificacion(String identificacion);
 	boolean existsByEmail(String email);
+	void deleteByIdentificacion(String identificacion);
 }

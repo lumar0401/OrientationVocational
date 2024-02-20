@@ -10,21 +10,23 @@ import org.slf4j.LoggerFactory;
 import com.co.orientationVocational.app.business.utils;
 import com.co.orientationVocational.app.data.testModel;
 import com.co.orientationVocational.app.data.testModelResponse;
-import com.co.orientationVocational.app.security.jwt.jwtEntryPoint;
 
 public class testChaside extends utils {
-	private final static Logger logger = LoggerFactory.getLogger(jwtEntryPoint.class);
+	private final static Logger logger = LoggerFactory.getLogger(testChaside.class);
 
-	public testChaside() {
-	}
+	public testChaside() {}
 	
 	public LinkedList<testModelResponse> resultTest(int[] questions) {
 		LinkedList<testModelResponse> resultFinal = new LinkedList<>();
 		LinkedList<testModel> test = new LinkedList<>();
 		
-		test = validationPositionResult(questions);
-		
-		resultFinal = asignationResult(test);
+		if(questions.length > 0) {
+			test = validationPositionResult(questions);
+			
+			resultFinal = asignationResult(test);
+		}else {
+			logger.error("Numero invalido de respuestas");
+		}
 		
 		return resultFinal;
 	}
@@ -411,6 +413,7 @@ public class testChaside extends utils {
 			career = "Área de Ciencias Experimentales";
 		}else {
 			career = "Campo Incorrecto";
+			logger.error("Error al asignar valores (campo invalido o incorrecto)");
 		}
 		
 		return career;
