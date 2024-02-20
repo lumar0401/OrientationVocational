@@ -30,6 +30,7 @@ public class usuario {
 	private String ciudad;
 	private String email;
 	private String password;
+	private String genero;
 	
 	@NotNull
 	@ManyToMany(fetch = FetchType.EAGER)
@@ -39,7 +40,7 @@ public class usuario {
 	public usuario() {}
 
 	public usuario(String identificacion, String nombres, String apellidos, String telefono, String direccion,
-			String ciudad, String email, String password) {
+			String ciudad, String email, String password, String genero) {
 		this.identificacion = identificacion;
 		this.nombres = nombres;
 		this.apellidos = apellidos;
@@ -48,6 +49,7 @@ public class usuario {
 		this.ciudad = ciudad;
 		this.email = email;
 		this.password = password;
+		this.genero = genero;
 	}
 
 	/**
@@ -190,10 +192,24 @@ public class usuario {
 		this.roles = roles;
 	}
 
+	/**
+	 * @return the genero
+	 */
+	public String getGenero() {
+		return genero;
+	}
+
+	/**
+	 * @param genero the genero to set
+	 */
+	public void setGenero(String genero) {
+		this.genero = genero;
+	}
+
 	@Override
 	public String toString() {
-		return "usuario [id=" + idUsuario + ", identificacion=" + identificacion + ", nombres="
+		return "usuario [" + ", identificacion=" + identificacion + ", nombres="
 				+ nombres + ", apellidos=" + apellidos + ", telefono=" + telefono + ", direccion=" + direccion
-				+ ", ciudad=" + ciudad + ", email=" + email + ", contrasena=" + password + ", roles=" + roles + "]";
+				+ ", email=" + email + "]";
 	}
 }

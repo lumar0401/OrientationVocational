@@ -1,4 +1,4 @@
-	package com.co.orientationVocational.app.services.dto;
+package com.co.orientationVocational.app.services.dto;
 
 public class chasideQuestionDto {
 	private String identificacion;

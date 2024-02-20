@@ -18,8 +18,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 
-import javax.validation.constraints.NotNull;
-
 @RestController
 @RequestMapping("/pregunta")
 public class preguntaController extends utils {
@@ -27,7 +25,6 @@ public class preguntaController extends utils {
 	@Autowired
 	preguntaService preguntaSer;
 	
-	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping("/lista")
 	public ResponseEntity<List<pregunta>> list() {
 		List<pregunta> list = preguntaSer.List();
@@ -66,7 +63,8 @@ public class preguntaController extends utils {
 			return new ResponseEntity(new Mensajes("La pregunta ya existe"), HttpStatus.BAD_REQUEST);
 		
 		pregunta preguntaNew = new pregunta(pregunta.getDescripcionPregunta(), pregunta.getOpcion1(), pregunta.getOpcion2(),
-				pregunta.getOpcion3(), pregunta.getOpcion4(), pregunta.getRespuesta1(), pregunta.getRespuesta2());
+				pregunta.getOpcion3(), pregunta.getOpcion4(), pregunta.getRespuesta1(), pregunta.getRespuesta2(),
+				pregunta.getTipoTest());
 		
 		preguntaSer.save(preguntaNew);
 		
@@ -93,36 +91,33 @@ public class preguntaController extends utils {
 		if(preguntaSer.existsByDescripcionPregunta(question.getDescripcionPregunta()) && preguntaSer.getByNombre(question.getDescripcionPregunta()).get().getId() != id)
             return new ResponseEntity(new Mensajes("Pregunta ya existe"), HttpStatus.BAD_REQUEST);
 		
-//        if(StringUtils.isBlank(question.getDescripcionPregunta()))
-//            return new ResponseEntity(new Mensajes("La descripcion de la pregunta es obligatoria"), HttpStatus.BAD_REQUEST);
-		
 		pregunta preguntaActualizada = preguntaSer.getOne(id).get();
 		
-		if(!esVacio(question.getDescripcionPregunta())) {
+		if(!esVacio(question.getDescripcionPregunta()) && !preguntaActualizada.getDescripcionPregunta().equals(question.getDescripcionPregunta())) {
 			preguntaActualizada.setDescripcionPregunta(question.getDescripcionPregunta());
 		}
 		
-		if(!esVacio(question.getOpcion1())) {
+		if(!esVacio(question.getOpcion1()) && !preguntaActualizada.getOpcion1().equals(question.getOpcion1())) {
 			preguntaActualizada.setOpcion1(question.getOpcion1());
 		}
 		
-		if(!esVacio(question.getOpcion2())) {
+		if(!esVacio(question.getOpcion2()) && !preguntaActualizada.getOpcion2().equals(question.getOpcion2())) {
 			preguntaActualizada.setOpcion2(question.getOpcion2());
 		}
 		
-		if(!esVacio(question.getOpcion3())) {
+		if(!esVacio(question.getOpcion3()) && !preguntaActualizada.getOpcion3().equals(question.getOpcion3())) {
 			preguntaActualizada.setOpcion3(question.getOpcion3());
 		}
 		
-		if(!esVacio(question.getOpcion4())) {
+		if(!esVacio(question.getOpcion4()) && !preguntaActualizada.getOpcion4().equals(question.getOpcion4())) {
 			preguntaActualizada.setOpcion4(question.getOpcion4());
 		}
 		
-		if(!esVacio(question.getRespuesta1())) {
+		if(!esVacio(question.getRespuesta1()) && !preguntaActualizada.getRespuesta1().equals(question.getRespuesta1())) {
 			preguntaActualizada.setRespuesta1(question.getRespuesta1());
 		}
 		
-		if(!esVacio(question.getRespuesta2())) {
+		if(!esVacio(question.getRespuesta2()) && !preguntaActualizada.getOpcion2().equals(question.getOpcion2())) {
 			preguntaActualizada.setRespuesta2(question.getRespuesta2());
 		}
 		
