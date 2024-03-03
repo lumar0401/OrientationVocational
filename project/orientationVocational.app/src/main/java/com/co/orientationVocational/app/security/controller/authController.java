@@ -1,5 +1,6 @@
 package com.co.orientationVocational.app.security.controller;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
@@ -44,6 +45,7 @@ import com.co.orientationVocational.app.security.service.rolService;
 import com.co.orientationVocational.app.security.service.usuarioService;
 import com.co.orientationVocational.app.services.dto.usuarioDto;
 import com.co.orientationVocational.app.services.implementation.logUsuarioService;
+import com.google.maps.errors.ApiException;
 
 @RestController
 @RequestMapping("/auth")
@@ -135,7 +137,7 @@ public class authController extends utils {
     }
     
     @GetMapping("/obtain/{id}")
-    public ResponseEntity<usuario> getByIdentificacion(@PathVariable("id") String identificacion){
+    public ResponseEntity<usuario> getByIdentificacion(@PathVariable("id") String identificacion) throws ApiException, InterruptedException, IOException{
     	if(!usuarioservice.existsByIdentificacion(identificacion))
 			return new ResponseEntity(new Mensajes("Usuario no existe"), HttpStatus.NOT_FOUND);
     	

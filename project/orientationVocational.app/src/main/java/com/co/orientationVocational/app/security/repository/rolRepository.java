@@ -10,5 +10,5 @@ import com.co.orientationVocational.app.security.enums.rolNombre;
 
 @Repository
 public interface rolRepository extends JpaRepository<rol, Integer>{
-		Optional<rol> findByDescripcion(rolNombre rol);
+	Optional<rol> findByDescripcion(rolNombre rol);
 }

@@ -121,6 +121,10 @@ public class preguntaController extends utils {
 			preguntaActualizada.setRespuesta2(question.getRespuesta2());
 		}
 		
+		if(!esVacio(question.getTipoTest()) && !preguntaActualizada.getTipoTest().equals(question.getTipoTest())) {
+			preguntaActualizada.setRespuesta2(question.getTipoTest());
+		}
+		
 		preguntaSer.save(preguntaActualizada);
 		
 		return new ResponseEntity(new Mensajes("Pregunta actualizada"), HttpStatus.OK);
