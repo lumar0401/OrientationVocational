@@ -8,15 +8,5 @@ public class informacionUniversity {
 	
 //	public Map<String, String> urlUniversidades(List<String> universidades){
 //		
-//		
-//		
-//		
-//		
-//		
-//		
-//		
-//		
-//		
 //	}
-	
 }
