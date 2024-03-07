@@ -28,11 +28,14 @@ public class preguntaDto {
 	@NotNull
 	private String tipoTest;
 	
+	@NotNull
+	private int ordenPregunta;
+	
 	public preguntaDto(){}
 
 	public preguntaDto(@NotNull String descripcionPregunta, @NotNull String opcion1, @NotNull String opcion2,
 			@NotNull String opcion3, @NotNull String opcion4, @NotNull String respuesta1, @NotNull String respuesta2,
-			@NotNull String tipoTest) {
+			@NotNull String tipoTest, @NotNull int ordenPregunta) {
 		this.descripcionPregunta = descripcionPregunta;
 		this.opcion1 = opcion1;
 		this.opcion2 = opcion2;
@@ -41,6 +44,7 @@ public class preguntaDto {
 		this.respuesta1 = respuesta1;
 		this.respuesta2 = respuesta2;
 		this.tipoTest = tipoTest;
+		this.ordenPregunta = ordenPregunta;
 	}
 
 	/**
@@ -153,5 +157,19 @@ public class preguntaDto {
 	 */
 	public void setTipoTest(String tipoTest) {
 		this.tipoTest = tipoTest;
+	}
+
+	/**
+	 * @return the ordenPregunta
+	 */
+	public int getOrdenPregunta() {
+		return ordenPregunta;
+	}
+
+	/**
+	 * @param ordenPregunta the ordenPregunta to set
+	 */
+	public void setOrdenPregunta(int ordenPregunta) {
+		this.ordenPregunta = ordenPregunta;
 	}
 }

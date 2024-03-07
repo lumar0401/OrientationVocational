@@ -4,6 +4,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface userService {
-	
 	public int loginValidation(String identificacion);
+	public String ciudadValidation(String identificacion);
 }

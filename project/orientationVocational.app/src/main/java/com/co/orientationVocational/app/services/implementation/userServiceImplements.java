@@ -54,5 +54,36 @@ public class userServiceImplements implements userService{
 		
 		return ingreso;
 	}
-
+	
+	@Override
+	public String ciudadValidation(String identificacion) {
+		StringBuilder sSql = new StringBuilder();
+		PreparedStatement pStm = null;
+		ResultSet rSet = null;
+		
+		String response = "";
+		
+		try {
+			sSql.append(" SELECT ciudad, identificacion ")
+			.append(" FROM usuario ")
+			.append(" WHERE IDENTIFICACION = ? ");
+			
+			pStm = connection.prepareStatement(sSql.toString());
+			
+			int i = 1;
+			
+			pStm.setObject(i++, identificacion.toString()); 
+			
+			rSet = pStm.executeQuery();
+			
+			if(rSet.next()) {
+				response = rSet.getString("ciudad");
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return response;
+	}
 }
