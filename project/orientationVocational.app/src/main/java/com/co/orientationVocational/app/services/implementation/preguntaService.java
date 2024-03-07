@@ -1,5 +1,8 @@
 package com.co.orientationVocational.app.services.implementation;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -7,12 +10,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.co.orientationVocational.app.services.models.pregunta;
 import com.co.orientationVocational.app.services.service.preguntaRepository;
 
-import java.util.List;
-import java.util.Optional;
-
 @Service
 @Transactional
 public class preguntaService {
+	
 	@Autowired
 	preguntaRepository preguntaRepo;
 	
@@ -30,6 +31,10 @@ public class preguntaService {
 	
 	public void save(pregunta preguntaNew) {
 		preguntaRepo.save(preguntaNew);
+	}
+	
+	public void saveList(List<pregunta> preguntaNew) {
+		preguntaRepo.saveAll(preguntaNew);
 	}
 	
 	public void delete(int id) {

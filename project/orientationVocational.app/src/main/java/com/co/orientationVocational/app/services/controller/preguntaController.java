@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import com.co.orientationVocational.app.business.Mensajes;
 import com.co.orientationVocational.app.business.utils;
 import com.co.orientationVocational.app.services.dto.preguntaDto;
+import com.co.orientationVocational.app.services.implementation.consultasDataBase;
 import com.co.orientationVocational.app.services.implementation.preguntaService;
 import com.co.orientationVocational.app.services.models.pregunta;
 
@@ -21,6 +22,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/pregunta")
 public class preguntaController extends utils {
+	@Autowired
+	consultasDataBase consulta;
 	
 	@Autowired
 	preguntaService preguntaSer;
@@ -28,6 +31,14 @@ public class preguntaController extends utils {
 	@GetMapping("/lista")
 	public ResponseEntity<List<pregunta>> list() {
 		List<pregunta> list = preguntaSer.List();
+		
+		return new ResponseEntity(list, HttpStatus.OK);
+	}
+
+	@PreAuthorize("hasRole('ADMIN')")
+	@GetMapping("/lista-chaside/{tipoTest}")
+	public ResponseEntity<List<pregunta>> ListaPreguntas(@PathVariable("tipoTest") String tipoTest) {
+		List<pregunta> list = consulta.ListaPreguntas(tipoTest);
 		
 		return new ResponseEntity(list, HttpStatus.OK);
 	}
@@ -64,7 +75,7 @@ public class preguntaController extends utils {
 		
 		pregunta preguntaNew = new pregunta(pregunta.getDescripcionPregunta(), pregunta.getOpcion1(), pregunta.getOpcion2(),
 				pregunta.getOpcion3(), pregunta.getOpcion4(), pregunta.getRespuesta1(), pregunta.getRespuesta2(),
-				pregunta.getTipoTest());
+				pregunta.getTipoTest(), pregunta.getOrdenPregunta());
 		
 		preguntaSer.save(preguntaNew);
 		
@@ -122,7 +133,11 @@ public class preguntaController extends utils {
 		}
 		
 		if(!esVacio(question.getTipoTest()) && !preguntaActualizada.getTipoTest().equals(question.getTipoTest())) {
-			preguntaActualizada.setRespuesta2(question.getTipoTest());
+			preguntaActualizada.setTipoTest(question.getTipoTest());
+		}
+		
+		if(!esVacio(question.getOrdenPregunta()) && (preguntaActualizada.getOrdenPregunta() != question.getOrdenPregunta())) {
+			preguntaActualizada.setOrdenPregunta(question.getOrdenPregunta());
 		}
 		
 		preguntaSer.save(preguntaActualizada);
