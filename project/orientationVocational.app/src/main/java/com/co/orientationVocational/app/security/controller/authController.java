@@ -220,6 +220,18 @@ public class authController extends utils {
     		camposNuevos = camposNuevos + " " + "Telefono: " + updateUsaurio.getTelefono().toString();
     	}
     	
+    	if(!esVacio(updateUsaurio.getPassword()) && !updateUsaurio.getPassword().equals(usuarioActualizado.getPassword())) {
+    		usuario usuarioEncontrado = usuarioservice.getByIdentificacion(identificacion).get();
+    		if(passwordEncoder.matches(updateUsaurio.getPassword(), usuarioEncontrado.getPassword())) {
+    			camposViejos = camposViejos + " " + "Password: " + usuarioEncontrado.getPassword().toString();
+    			String passNew = passwordEncoder.encode(updateUsaurio.getPasswordNew());
+    			usuarioActualizado.setPassword(passNew);
+    			camposNuevos = camposNuevos + " " + "Password: " + passNew.toString();
+    		}else {
+    			return new ResponseEntity(new Mensajes("Contraseña incorrecta"), HttpStatus.NOT_FOUND);
+    		}
+    	}
+    	
     	usuarioservice.save(usuarioActualizado);
     	
     	LocalDateTime fechaHoraActual = LocalDateTime.now();
