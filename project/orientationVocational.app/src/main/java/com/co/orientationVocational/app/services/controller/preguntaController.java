@@ -128,7 +128,7 @@ public class preguntaController extends utils {
 			preguntaActualizada.setRespuesta1(question.getRespuesta1());
 		}
 		
-		if(!esVacio(question.getRespuesta2()) && !preguntaActualizada.getOpcion2().equals(question.getOpcion2())) {
+		if(!esVacio(question.getRespuesta2()) && !preguntaActualizada.getRespuesta2().equals(question.getRespuesta2())) {
 			preguntaActualizada.setRespuesta2(question.getRespuesta2());
 		}
 		

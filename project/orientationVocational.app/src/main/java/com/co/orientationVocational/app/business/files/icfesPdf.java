@@ -18,7 +18,6 @@ public class icfesPdf extends utils {
 	public icfesPdf() {}
 
 	public icfesUsuario gestionArchivo(String rutaArchivo, String identificacion) throws InvalidPasswordException, IOException {
-		LinkedList<evidenceModel> listPrueba = new LinkedList<evidenceModel>();
 		icfesUsuario result = new icfesUsuario();
 		boolean existe = existFile(rutaArchivo);
 

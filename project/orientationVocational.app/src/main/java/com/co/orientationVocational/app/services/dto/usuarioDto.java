@@ -27,10 +27,17 @@ public class usuarioDto {
 	@NotBlank
 	private String genero;
 	
+	@NotBlank
+	private String password;
+	
+	@NotBlank
+	private String passwordNew;
+	
 	public usuarioDto() {}
 
 	public usuarioDto(@NotBlank String telefono, @NotBlank @Email String email, @NotBlank String nombres, 
-			@NotBlank String apellidos, @NotBlank String direccion, @NotBlank String ciudad, @NotBlank String genero) {
+			@NotBlank String apellidos, @NotBlank String direccion, @NotBlank String ciudad, @NotBlank String genero,
+			@NotBlank String password, @NotBlank String passwordNew) {
 		this.telefono = telefono;
 		this.email = email;
 		this.nombres = nombres;
@@ -38,6 +45,8 @@ public class usuarioDto {
 		this.direccion = direccion;
 		this.ciudad = ciudad;
 		this.genero = genero;
+		this.password = password;
+		this.passwordNew = passwordNew;
 	}
 
 	/**
@@ -136,5 +145,33 @@ public class usuarioDto {
 	 */
 	public void setGenero(String genero) {
 		this.genero = genero;
+	}
+
+	/**
+	 * @return the password
+	 */
+	public String getPassword() {
+		return password;
+	}
+
+	/**
+	 * @param password the password to set
+	 */
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	/**
+	 * @return the passwordNew
+	 */
+	public String getPasswordNew() {
+		return passwordNew;
+	}
+
+	/**
+	 * @param passwordNew the passwordNew to set
+	 */
+	public void setPasswordNew(String passwordNew) {
+		this.passwordNew = passwordNew;
 	}
 }
