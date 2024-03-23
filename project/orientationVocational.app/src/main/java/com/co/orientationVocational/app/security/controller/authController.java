@@ -177,6 +177,7 @@ public class authController extends utils {
         Map<String, Object> usuarioLog = new HashMap<String, Object>();
         String camposViejos = "";
         String camposNuevos = "";
+        boolean confirmacion = false;
                
     	if(!usuarioservice.existsByIdentificacion(identificacion)) {
     		return new ResponseEntity(new Mensajes("Usuario no Encontrado"), HttpStatus.NOT_FOUND);
@@ -188,36 +189,42 @@ public class authController extends utils {
     		camposViejos = "Apellidos: " + camposViejos + usuarioActualizado.getApellidos().toString();
     		usuarioActualizado.setApellidos(updateUsaurio.getApellidos());
     		camposNuevos = "Apellidos: " + camposNuevos + updateUsaurio.getApellidos().toString();
+    		confirmacion = true;
     	}
     	
     	if(!esVacio(updateUsaurio.getNombres()) && !updateUsaurio.getNombres().equals(usuarioActualizado.getNombres())) {
     		camposViejos = camposViejos + " " + "Nombres: " + usuarioActualizado.getNombres().toString();
     		usuarioActualizado.setNombres(updateUsaurio.getNombres());
     		camposNuevos = camposNuevos + " " + "Nombres: " + updateUsaurio.getNombres().toString();
+    		confirmacion = true;
     	}
     	
     	if(!esVacio(updateUsaurio.getCiudad()) && !updateUsaurio.getCiudad().equals(usuarioActualizado.getCiudad())) {
     		camposViejos = camposViejos + " " + "Ciudad: " + usuarioActualizado.getCiudad().toString();
     		usuarioActualizado.setCiudad(updateUsaurio.getCiudad());
     		camposNuevos = camposNuevos + " " + "Ciudad: " + updateUsaurio.getCiudad().toString();
+    		confirmacion = true;
     	}
     	
     	if(!esVacio(updateUsaurio.getDireccion()) && !updateUsaurio.getDireccion().equals(usuarioActualizado.getDireccion())) {
     		camposViejos = camposViejos + " " + "Direccion: " + usuarioActualizado.getDireccion().toString();
     		usuarioActualizado.setDireccion(updateUsaurio.getDireccion());
     		camposNuevos = camposNuevos + " " + "Direccion: " + updateUsaurio.getDireccion().toString();
+    		confirmacion = true;
     	}
     	
     	if(!esVacio(updateUsaurio.getEmail()) && !updateUsaurio.getEmail().equals(usuarioActualizado.getEmail())) {
     		camposViejos = camposViejos + " " + "Email: " + usuarioActualizado.getEmail().toString();
     		usuarioActualizado.setEmail(updateUsaurio.getEmail());
     		camposNuevos = camposNuevos + " " + "Email: " + updateUsaurio.getEmail().toString();
+    		confirmacion = true;
     	}
     	
     	if(!esVacio(updateUsaurio.getTelefono()) && !updateUsaurio.getTelefono().equals(usuarioActualizado.getTelefono())) {
     		camposViejos = camposViejos + " " + "Telefono: " + usuarioActualizado.getTelefono().toString();
     		usuarioActualizado.setTelefono(updateUsaurio.getTelefono());
     		camposNuevos = camposNuevos + " " + "Telefono: " + updateUsaurio.getTelefono().toString();
+    		confirmacion = true;
     	}
     	
     	if(!esVacio(updateUsaurio.getPassword()) && !updateUsaurio.getPassword().equals(usuarioActualizado.getPassword())) {
@@ -227,6 +234,7 @@ public class authController extends utils {
     			String passNew = passwordEncoder.encode(updateUsaurio.getPasswordNew());
     			usuarioActualizado.setPassword(passNew);
     			camposNuevos = camposNuevos + " " + "Password: " + passNew.toString();
+    			confirmacion = true;
     		}else {
     			return new ResponseEntity(new Mensajes("Contraseña incorrecta"), HttpStatus.NOT_FOUND);
     		}
@@ -234,17 +242,19 @@ public class authController extends utils {
     	
     	usuarioservice.save(usuarioActualizado);
     	
-    	LocalDateTime fechaHoraActual = LocalDateTime.now();
-        DateTimeFormatter formatoSQL = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        String fechaHoraSQL = fechaHoraActual.format(formatoSQL);
-        
-        usuarioLog.put("operacion", "update");
-        usuarioLog.put("fechaRegistro", fechaHoraSQL);
-        usuarioLog.put("identificacion", identificacion);
-        usuarioLog.put("camposViejos", camposViejos.toString());
-        usuarioLog.put("camposNuevos", camposNuevos.toString());
-        
-        logUsuario.insertRegistre(usuarioLog);        
+    	if(confirmacion == true) {
+    		LocalDateTime fechaHoraActual = LocalDateTime.now();
+            DateTimeFormatter formatoSQL = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            String fechaHoraSQL = fechaHoraActual.format(formatoSQL);
+            
+            usuarioLog.put("operacion", "update");
+            usuarioLog.put("fechaRegistro", fechaHoraSQL);
+            usuarioLog.put("identificacion", identificacion);
+            usuarioLog.put("camposViejos", camposViejos.toString());
+            usuarioLog.put("camposNuevos", camposNuevos.toString());
+            
+            logUsuario.insertRegistre(usuarioLog);
+    	}
     	
     	return new ResponseEntity(new Mensajes("Usuario Actualizado"), HttpStatus.OK);
     }
