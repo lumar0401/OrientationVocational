@@ -42,6 +42,13 @@ public class preguntaController extends utils {
 		return new ResponseEntity(list, HttpStatus.OK);
 	}
 	
+	@GetMapping("/lista-holland/{tipoTest}")
+	public ResponseEntity<List<pregunta>> ListaPreguntasHolland(@PathVariable("tipoTest") String tipoTest) {
+		List<pregunta> list = consulta.ListaPreguntas(tipoTest);
+		
+		return new ResponseEntity(list, HttpStatus.OK);
+	}
+	
 	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping("/detail/{id}")
 	public ResponseEntity<pregunta> getById(@PathVariable("id") int id){
