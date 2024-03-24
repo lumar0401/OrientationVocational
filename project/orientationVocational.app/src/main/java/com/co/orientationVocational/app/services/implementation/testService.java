@@ -29,8 +29,8 @@ public class testService implements testRepository{
 		
 		try {
 			sSql.append(" INSERT INTO test (identificacion_usuario, resultado_test, tipo_test, ")
-			.append(" fecha_test, observacion_test) ")
-			.append(" VALUES (?,?,?,?,?) ");
+			.append(" fecha_test, observacion_test, detalle1, detalle2, detalle3) ")
+			.append(" VALUES (?,?,?,?,?,?,?,?) ");
 			
 			pStm = connection.prepareStatement(sSql.toString());
 			
@@ -41,6 +41,9 @@ public class testService implements testRepository{
 			pStm.setObject(i++, mapaDatos.get("stTipoTest"));
 			pStm.setObject(i++, mapaDatos.get("stFechaTest"));
 			pStm.setObject(i++, mapaDatos.get("stObservacionTest"));
+			pStm.setObject(i++, mapaDatos.get("stDetalle1"));
+			pStm.setObject(i++, mapaDatos.get("stDetalle2"));
+			pStm.setObject(i++, mapaDatos.get("stDetalle3"));
 			
 			rSet = pStm.executeUpdate();
 			

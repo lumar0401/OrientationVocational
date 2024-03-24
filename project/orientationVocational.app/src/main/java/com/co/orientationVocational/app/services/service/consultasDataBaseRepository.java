@@ -9,6 +9,7 @@ import com.co.orientationVocational.app.services.models.pregunta;
 @Repository
 public interface consultasDataBaseRepository {
 	public boolean cantidadDatos(String tabla);
+	public boolean cantidadDatosHolland(String tabla);
 	public int insertRegistre(pregunta newPregunta);
 	List<pregunta> ListaPreguntas(String tipoTest);
 }

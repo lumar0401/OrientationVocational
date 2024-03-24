@@ -15,6 +15,7 @@ public class logUsuarioDto {
 	
 	@Column(columnDefinition = "LONGTEXT")
 	private String camposNuevos;
+	
 	private String operacion;
 	private String fechaRegistro;
 	
@@ -23,7 +24,7 @@ public class logUsuarioDto {
 	public logUsuarioDto(@NotNull String identificacion, String registro, String camposViejos, String camposNuevos,
 			String operacion, String fechaRegistro) {
 		this.identificacion = identificacion;
-		Registro = registro;
+		this.Registro = registro;
 		this.camposViejos = camposViejos;
 		this.camposNuevos = camposNuevos;
 		this.operacion = operacion;

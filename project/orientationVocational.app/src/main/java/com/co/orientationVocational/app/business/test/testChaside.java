@@ -356,67 +356,85 @@ public class testChaside extends utils {
 	private static LinkedList<testModelResponse>  asignationResult(LinkedList<testModel> test) {
 		LinkedList<testModelResponse> resultFinal = new LinkedList<testModelResponse>();
 		
-		testModelResponse response1 = new testModelResponse();
-		testModelResponse response2 = new testModelResponse();
-		
-		int temp = 1;
-		
-		String asignation = "";
-		
-		for (testModel testModel : test) {
-			if((temp == 1) && testModel.getResultado() > 0) {
-				response1.setLlave(testModel.getLlave().toString());
-				response1.setResultado(testModel.getResultado());
+		testModelResponse[] respons = new testModelResponse[2]; 
 				
-				asignation = AsignationInters(testModel.getLlave(), testModel.getResultado());
-				response1.setAreaInteres(asignation);
-				
-				asignation = "";
-				
-				resultFinal.add(response1);
-				
-				temp++;
-			}else if((temp == 2) && testModel.getResultado() > 0) {
-				response2.setLlave(testModel.getLlave().toString());
-				response2.setResultado(testModel.getResultado());
-				
-				asignation = AsignationInters(testModel.getLlave(), testModel.getResultado());
-				response2.setAreaInteres(asignation);
-				
-				asignation = "";
-				
-				resultFinal.add(response2);
-			}
+		for (int i = 0; i < test.size(); i++) {
+			respons[i] = new testModelResponse();
+			
+			respons[i].setLlave(test.get(i).getLlave().toString());
+			respons[i].setResultado(test.get(i).getResultado());
+			
+			AsignationInters(respons[i], test.get(i).getLlave(), test.get(i).getResultado());
+						
+			resultFinal.add(respons[i]);
 		}
 		
 		return resultFinal;
 	}
 	
-	private static String AsignationInters(String valorCampo, int resultado) {
+	private static void AsignationInters(testModelResponse testResponse, String valorCampo, int resultado) {
 		String career = "";
+		String caract = "";
 		
 		comparation valor = comparation.valueOf(valorCampo);
 		
 		if((comparation.C.equals(valor)) && resultado > 0) {
 			career = "Área Administrativa";
+			caract = "Organización, Supervisión, Orden, Análisis y síntesis, Colaboración, "
+					+ "Cálculo, Persuasivo, Objetivo, Práctico, Tolerante, Responsable, "
+					+ "Ambicioso";
+			
+			testResponse.setAreaInteres(career);
+			testResponse.setCaracteristicas(caract);
 		}else if((comparation.H.equals(valor)) && resultado > 0) {
 			career = "Área de Humanidades y Ciencias Sociales y Jurídicas";
+			caract = "Precisión Verbal, Organización, Relación de hechos, Lingüística, "
+					+ "Orden, Justicia, Responsable, Justo, Conciliador, Persuasivo, "
+					+ "Sagaz, Imaginativo";
+			
+			testResponse.setAreaInteres(career);
+			testResponse.setCaracteristicas(caract);
 		}else if((comparation.A.equals(valor)) && resultado > 0) {
 			career = "Área Artística";
+			caract = "Estético, Armónico, Manual, Visual, Auditivo, Sensible, Imaginativo, "
+					+ "Creativo, Detallista, Innovador, Intuitivo";
+			
+			testResponse.setAreaInteres(career);
+			testResponse.setCaracteristicas(caract);
 		}else if((comparation.S.equals(valor)) && resultado > 0) {
 			career = "Área de Ciencias de la Salud";
+			caract = "Asistir, Investigar, Precisión, Percepción, Análisis, Ayudar, "
+					+ "Altruista, Solidario, Paciente, Comprensivo, Respetuoso, "
+					+ "Persuasivo";
+			
+			testResponse.setAreaInteres(career);
+			testResponse.setCaracteristicas(caract);
 		}else if((comparation.I.equals(valor)) && resultado > 0) {
 			career = "Área de Enseñanzas Técnicas";
+			caract = "Cálculo, Científico, Manual, Exactitud, Planificar, Preciso, "
+					+ "Práctico, Crítico, Analítico, Rígido";
+			
+			testResponse.setAreaInteres(career);
+			testResponse.setCaracteristicas(caract);
 		}else if((comparation.D.equals(valor)) && resultado > 0) {
 			career = "Área de Defensa y Seguridad";
+			caract = "Justicia, Equidad, Colaboración, Espíritu de equipo, Liderazgo, "
+					+ "Arriesgado, Solidario, Valiente, Agresivo, Persuasivo";
+			
+			testResponse.setAreaInteres(career);
+			testResponse.setCaracteristicas(caract);
 		}else if((comparation.E.equals(valor)) && resultado > 0) {
 			career = "Área de Ciencias Experimentales";
+			caract = "Investigación, Orden, Organización, Análisis y Síntesis, Cálculo numérico, "
+					+ "Clasificar, Metódico, Analítico, Observador, Introvertido, Paciente, "
+					+ "Seguro";
+			
+			testResponse.setAreaInteres(career);
+			testResponse.setCaracteristicas(caract);
 		}else {
 			career = "Campo Incorrecto";
 			logger.error("Error al asignar valores (campo invalido o incorrecto)");
 		}
-		
-		return career;
 	}
 	
 	public enum comparation{
