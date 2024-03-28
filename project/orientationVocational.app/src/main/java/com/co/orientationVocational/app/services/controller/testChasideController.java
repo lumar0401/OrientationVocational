@@ -41,21 +41,16 @@ public class testChasideController extends utils {
 	public ResponseEntity<LinkedList<testModelResponse>> resultTest(@RequestBody chasideQuestionDto chasideQuestion) throws SQLException {		
 		testChaside chaside = new testChaside();
 		
-		LinkedList<testModelResponse>  responseTest = chaside.resultTest(chasideQuestion.getTestQuestion());
+		LinkedList<testModelResponse> responseTest = chaside.resultTest(chasideQuestion.getTestQuestion());
 		
 		insertarRegistroTest(chasideQuestion.getIdentificacion(), responseTest);
 		
     	try {
     		ApiUniversity Listauniversidades = new ApiUniversity();
     		
-    		String ciudad = userServices.ciudadValidation(chasideQuestion.getIdentificacion());
+    		List<String> datosUsuario = userServices.ciudadValidation(chasideQuestion.getIdentificacion());
 
-    		List<String> universidades = Listauniversidades.consultaUniversidades(ciudad);
-    		
-    		
-    		for (String string : universidades) {
-				System.out.println(string);
-			}
+    		List<String> universidades = Listauniversidades.consultaUniversidades(responseTest, datosUsuario);
     		
 		} catch (Exception e) {
 			logger.error("Error en la busquedad de datos (API University)");
