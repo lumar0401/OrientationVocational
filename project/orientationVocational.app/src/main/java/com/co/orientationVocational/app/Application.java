@@ -39,5 +39,4 @@ public class Application implements CommandLineRunner {
 		fileservice.deleteAll();
 		fileservice.init();
 	}
-
 }
