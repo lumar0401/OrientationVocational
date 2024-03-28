@@ -34,6 +34,19 @@ public class createQuestion implements CommandLineRunner {
         if(archivo == true && cantidad == false) {
         	obtenerInfoArchivo(rutaAbsoluta.toString());
         }
+        
+        String testHolland = "QuestionTestHolland.txt";
+		File rutaArchivoHolland = new File(testHolland);
+
+        String rutaAbsolutaHolland = rutaArchivoHolland.getAbsolutePath();
+        
+        boolean archivoHolland = existFile(rutaAbsolutaHolland);
+        
+        boolean cantidadHolland = preguntaS.cantidadDatosHolland("pregunta");
+        
+        if(archivoHolland == true && cantidadHolland == false) {
+        	obtenerInfoArchivoHolland(rutaAbsolutaHolland.toString());
+        }
 	}
 	
 	private boolean existFile(String rutarelativa) {
@@ -80,6 +93,52 @@ public class createQuestion implements CommandLineRunner {
 	            }
 	            
 	            for (pregunta pregunta : listaPreguntasTestChaside) {
+	            	preguntaS.insertRegistre(pregunta);
+				}
+	            
+	            scanner.close();
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        }
+		} catch (Exception e) {
+			logger.error("Error al descifrar archivo TestChaside.txt");		
+		}
+	}
+	
+	private void obtenerInfoArchivoHolland(String ruta) throws Exception {
+		try {		
+			pregunta[] question = new pregunta[54];
+			List<pregunta> listaPreguntasTestHolland = new LinkedList<pregunta>();
+
+			try {
+	            File archivo = new File(ruta);
+	            Scanner scanner = new Scanner(archivo);
+	            
+	            int contador = 1;
+                int temp = 0;
+	            
+	            while (scanner.hasNextLine()) {
+	                String linea = scanner.nextLine();
+	                
+	                question[temp] = new pregunta();
+	                
+	                question[temp].setDescripcionPregunta(linea);
+	                question[temp].setOpcion1("Si");
+	                question[temp].setOpcion2("No");
+	                question[temp].setOpcion3(" ");
+	                question[temp].setOpcion4(" ");
+	                question[temp].setRespuesta1(" ");
+	                question[temp].setRespuesta2(" ");
+	                question[temp].setTipoTest("Holland");
+	                question[temp].setOrdenPregunta(contador);
+	                
+	                listaPreguntasTestHolland.add(question[temp]);
+	                
+	                contador++;
+	                temp++;
+	            }
+	            
+	            for (pregunta pregunta : listaPreguntasTestHolland) {
 	            	preguntaS.insertRegistre(pregunta);
 				}
 	            

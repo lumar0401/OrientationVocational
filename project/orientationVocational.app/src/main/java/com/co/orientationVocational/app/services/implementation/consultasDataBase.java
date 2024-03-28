@@ -51,6 +51,35 @@ public class consultasDataBase implements consultasDataBaseRepository {
 	}
 	
 	@Override
+	public boolean cantidadDatosHolland(String tabla) {
+		StringBuilder sSql = new StringBuilder();
+		PreparedStatement pStm = null;
+		ResultSet rSet = null;
+		
+		String tablaConsulta = tabla;
+		boolean response = true;
+		
+		try {
+			sSql.append(" SELECT COUNT(*) FROM ")
+			.append(tablaConsulta);
+			
+			pStm = connection.prepareStatement(sSql.toString());
+			
+			rSet = pStm.executeQuery();
+			
+			if(rSet.next()) {
+				if(rSet.getInt(1) < 99) {
+					response = false;
+				}
+			}			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return response;
+	}
+	
+	@Override
 	public int insertRegistre(pregunta newsPregunta) {
 		StringBuilder sSql = new StringBuilder();
 		PreparedStatement pStm = null;
