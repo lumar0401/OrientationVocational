@@ -1,10 +1,14 @@
 package com.co.orientationVocational.app.services.controller;
 
 import java.io.IOException;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 import org.apache.pdfbox.pdmodel.encryption.InvalidPasswordException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,6 +71,30 @@ public class icfesPdfController extends utils {
 		}
 	}
 	
+	@PostMapping("/upload-pdf")
+	public String uploadPdf(@RequestParam("file") MultipartFile file) {
+		try {
+			String folder = "uploads";
+			String currentDirectory = System.getProperty("user.dir");
+			Path directoryPath = Paths.get(currentDirectory, folder);
+
+			if (!Files.exists(directoryPath)) {
+				Files.createDirectories(directoryPath);
+			}
+
+			Path destinationPath = directoryPath.resolve(file.getOriginalFilename());
+			Files.copy(file.getInputStream(), destinationPath, StandardCopyOption.REPLACE_EXISTING);
+
+			return "El archivo se cargó correctamente.";
+		} catch (IOException e) {
+			e.printStackTrace();
+			return "Error al cargar el archivo: " + e.getMessage();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			return "Error desconocido: " + ex.getMessage();
+		}
+	}
+
 	@PostMapping("/upload")
 	public ResponseEntity<FileMessages> uploadFiles(@RequestParam("file")MultipartFile[] files){
 		String message = "";
