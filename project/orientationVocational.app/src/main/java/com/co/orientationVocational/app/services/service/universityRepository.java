@@ -1,11 +1,11 @@
 package com.co.orientationVocational.app.services.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface userService {
-	public int loginValidation(String identificacion);
-	public List<String> ciudadValidation(String identificacion);
+public interface universityRepository {
+	public List<String> pageUniversity(Map<String, String> mapDatos);
 }
