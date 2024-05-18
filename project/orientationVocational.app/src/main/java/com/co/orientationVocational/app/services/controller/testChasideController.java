@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.co.orientationVocational.app.business.utils;
 import com.co.orientationVocational.app.business.test.testChaside;
 import com.co.orientationVocational.app.business.university.ApiUniversity;
+import com.co.orientationVocational.app.data.respuestaUniversidades;
 import com.co.orientationVocational.app.data.testModelResponse;
 import com.co.orientationVocational.app.services.dto.chasideQuestionDto;
 import com.co.orientationVocational.app.services.implementation.testService;
@@ -38,7 +39,9 @@ public class testChasideController extends utils {
 	testService testservice;
 	
 	@PostMapping("/result")
-	public ResponseEntity<LinkedList<testModelResponse>> resultTest(@RequestBody chasideQuestionDto chasideQuestion) throws SQLException {		
+	public ResponseEntity<respuestaUniversidades> resultTest(@RequestBody chasideQuestionDto chasideQuestion) throws SQLException {		
+		respuestaUniversidades universidades = new respuestaUniversidades();
+		
 		testChaside chaside = new testChaside();
 		
 		LinkedList<testModelResponse> responseTest = chaside.resultTest(chasideQuestion.getTestQuestion());
@@ -49,14 +52,25 @@ public class testChasideController extends utils {
     		ApiUniversity Listauniversidades = new ApiUniversity();
     		
     		List<String> datosUsuario = userServices.ciudadValidation(chasideQuestion.getIdentificacion());
+    		
+    		datosUsuario.add("CHASIDE");
 
-    		List<String> universidades = Listauniversidades.consultaUniversidades(responseTest, datosUsuario);
+    		universidades = Listauniversidades.consultaUniversidades(responseTest, datosUsuario);
     		
 		} catch (Exception e) {
-			logger.error("Error en la busquedad de datos (API University)");
+			logger.error("Error en la busquedad de datos (API University) Datos: " + e);
+			
+			respuestaUniversidades respuestaError = new respuestaUniversidades();
+			
+			respuestaError.setRespuestaBackUp(responseTest);
+			
+			if(!esVacio(respuestaError))
+				respuestaError.setStatus(true);
+			
+			return new ResponseEntity(respuestaError, HttpStatus.OK);	
 		}
 		
-		return new ResponseEntity(responseTest, HttpStatus.OK);
+		return new ResponseEntity(universidades, HttpStatus.OK);
 	}
 	
 	private void insertarRegistroTest(String identificacion, LinkedList<testModelResponse> responseTest) throws SQLException {

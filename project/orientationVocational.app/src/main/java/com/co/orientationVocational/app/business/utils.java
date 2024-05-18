@@ -11,6 +11,24 @@ public class utils {
 		}
 	}
 	
+	public boolean esNumeroDouble(String valor) {
+		try {
+	        Double.parseDouble(valor);
+	        return true;
+	    } catch (NumberFormatException e) {
+	        return false;
+	    }
+	}
+	
+	public boolean esNumeroEntero(String valor) {
+		try {
+	        Integer.parseInt(valor);
+	        return true;
+	    } catch (NumberFormatException e) {
+	        return false;
+	    }
+	}
+	
 	public boolean esNumero(String valor, String simbolo) {
 		
 		if(valor == null || valor.equals("") || valor.isEmpty()) {
@@ -21,7 +39,7 @@ public class utils {
 			String[] arreglo = valor.split(simbolo);
 			
 			for (String aux : arreglo) {
-	            if (!esNumeroEntero(aux)) {
+	            if (!esNumeroEnt(aux)) {
 	                return false;
 	            }
 	        }
@@ -36,7 +54,7 @@ public class utils {
 		return true;
 	}
 	
-	private boolean esNumeroEntero(String valor) {
+	private boolean esNumeroEnt(String valor) {
 	    try {
 	        Integer.parseInt(valor);
 	        return true;
@@ -44,4 +62,9 @@ public class utils {
 	        return false;
 	    }
 	}
+	
+	public boolean esEnlaceWeb(String cadena) {
+        String patronEnlaceWeb = "^(http[s]?:\\/\\/)?([w]{3}\\.)?([a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,}(\\/\\S*)?$";
+        return cadena.matches(patronEnlaceWeb);
+    }
 }

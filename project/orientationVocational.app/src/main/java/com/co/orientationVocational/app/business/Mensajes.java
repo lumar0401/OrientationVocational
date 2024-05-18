@@ -2,6 +2,8 @@ package com.co.orientationVocational.app.business;
 
 public class Mensajes {
 	private String mensajes;
+	
+	public Mensajes() {}
 
 	public Mensajes(String mensajes) {
 		super();

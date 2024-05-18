@@ -4,16 +4,16 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
-import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
+import com.co.orientationVocational.app.business.utils;
 import com.co.orientationVocational.app.data.dataBase;
+import com.co.orientationVocational.app.data.modelUniversityPage;
 import com.co.orientationVocational.app.services.service.universityRepository;
 
 @Service
-public class universityService implements universityRepository{
+public class universityService extends utils implements universityRepository {
 	Connection connection;
 	
 	public universityService() throws SQLException {
@@ -21,41 +21,98 @@ public class universityService implements universityRepository{
 	}
 
 	@Override
-	public List<String> pageUniversity(Map<String, String> mapDatos) {
+	public modelUniversityPage pageUniversity(String datos, String intereses, String test) {
+		modelUniversityPage result = new modelUniversityPage();
 		StringBuilder sSql = new StringBuilder();
 		PreparedStatement pStm = null;
 		ResultSet rSet = null;
+		String format = "";
 		
-		int ingreso = 0;
+		String[] datosTemp = datos.split(" ");
+		
+		String[] interesestemp = (!esVacio(intereses)) ? intereses.split(",") : new String[0];
+		
 		
 		try {
-			sSql.append(" SELECT * ")
-			.append(" FROM usuario ")
-			.append(" WHERE IDENTIFICACION = ? ");
+			sSql.append(" SELECT id_universidad, nombre_universidad, url_pagina, direccion ")
+			.append(" FROM universidades ")
+			.append(" WHERE nombre_universidad like ? ");
+		
+			for (int j = 1; j < datosTemp.length; j++) {
+				sSql.append(" AND nombre_universidad like ? ");
+			}
 			
+			if(intereses.length() > 1) {
+				String columnName = (test.toString().toLowerCase().equals("chaside")) ? "caracteristicas_chaside" : "caracteristicas_holland";
+				
+				sSql.append(" AND (");
+				
+				for (int j = 0; j < interesestemp.length; j++) {
+					if(j == 0) {
+						sSql.append(columnName + " = '" + interesestemp[j] + "'");
+					}else {
+						sSql.append(" OR " + columnName + " = '" + interesestemp[j] + "' ");
+					}
+					
+				}
+				
+				sSql.append(")");
+			}
+												
 			pStm = connection.prepareStatement(sSql.toString());
 			
 			int i = 1;
 			
-			pStm.setObject(i++, mapDatos.toString()); 
+			format = "%" + datosTemp[0].toString() + "%";
 			
+			pStm.setObject(i++, format.toString());
+		
+			for (int j = 1; j < datosTemp.length; j++) {
+				format = "%" + datosTemp[j].toString() + "%";
+				pStm.setObject(i++, format.toString());
+			}
+						
 			rSet = pStm.executeQuery();
 			
 			if(rSet.next()) {
-				if(rSet.getString("identificacion").equals(mapDatos)) {
-					ingreso = 1;
-				}else {
-					ingreso = 0;
-				}
+				result.setId(rSet.getString("id_universidad").toString());
+				result.setPaginaUrl(rSet.getString("url_pagina").toString());
+				result.setDirecciones(rSet.getString("direccion").toString());
 			}
-			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		
-		
-		
-		return null;
+		return result;
 	}
 
+	@Override
+	public String obtainMetadatos(String idUniversidad) {
+		StringBuilder sSql = new StringBuilder();
+		PreparedStatement pStm = null;
+		ResultSet rSet = null;
+		String pDatos = "";
+		
+		try {
+			sSql.append(" SELECT metadatos_web ")
+			.append(" FROM metadatos_html ")
+			.append(" WHERE id_universidad = ? ");		
+												
+			pStm = connection.prepareStatement(sSql.toString());
+			
+			int i = 1;
+						
+			pStm.setObject(i++, idUniversidad.toString());
+						
+			rSet = pStm.executeQuery();
+			
+			if(rSet.next()) {
+				pDatos = rSet.getString("metadatos_web").toString();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return pDatos;
+	}
 }

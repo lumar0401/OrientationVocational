@@ -104,12 +104,41 @@ public class testHolland extends utils {
 		for (int i = 0; i < test.size(); i++) {
 			respons[i] = new testModelResponse();
 			
-			respons[i].setLlave(test.get(i).getLlave().toString());
 			respons[i].setResultado(test.get(i).getResultado());
 			
 			AsignationInters(respons[i], test.get(i).getLlave(), test.get(i).getResultado());
 			
+			String llaveDesc = "";
+			
+			switch(test.get(i).getLlave().toString()) {
+				case "C":
+					llaveDesc = "Convencional o Detallista";
+					break;
+				case "R":
+					llaveDesc = "Realista";
+					break;
+				case "I":
+					llaveDesc = "Investigador";
+					break;
+				case "E":
+					llaveDesc = "Emprendedor";
+					break;
+				case "S":
+					llaveDesc = "Social";
+					break;
+				case "A":
+					llaveDesc = "Artista";
+					break;
+				default:
+					llaveDesc = "Error";
+					break;
+			}
+			
+			respons[i].setLlave(llaveDesc.toString());
+			
 			resultFinal.add(respons[i]);
+			
+			llaveDesc = "";
 		}
 		
 		return resultFinal;

@@ -13,22 +13,24 @@ public class universidades {
 	
 	private String nombreUniversidad;
 	private String urlPagina;
-	private String categoria;
 	private String direccion;
-	private String carrera;
-	private String ciudad; 
+	private String ciudad;
+	private String programa;
+	private String caracteristicasChaside;
+	private String caracteristicasHolland;
 	
 	public universidades() {}
 
-	public universidades(int idUniversidad, String nombreUniversidad, String urlPagina, String ciudad, String categoria, String direccion,
-			String carrera) {
+	public universidades(int idUniversidad, String nombreUniversidad, String urlPagina, String direccion, String ciudad,
+			String programa, String caracteristicasChaside, String caracteristicasHolland) {
 		this.idUniversidad = idUniversidad;
 		this.nombreUniversidad = nombreUniversidad;
 		this.urlPagina = urlPagina;
-		this.categoria = categoria;
 		this.direccion = direccion;
-		this.carrera = carrera;
 		this.ciudad = ciudad;
+		this.programa = programa;
+		this.caracteristicasChaside = caracteristicasChaside;
+		this.caracteristicasHolland = caracteristicasHolland;
 	}
 
 	/**
@@ -74,34 +76,6 @@ public class universidades {
 	}
 
 	/**
-	 * @return the ciudad
-	 */
-	public String getCiudad() {
-		return ciudad;
-	}
-
-	/**
-	 * @param ciudad the ciudad to set
-	 */
-	public void setCiudad(String ciudad) {
-		this.ciudad = ciudad;
-	}
-
-	/**
-	 * @return the categoria
-	 */
-	public String getCategoria() {
-		return categoria;
-	}
-
-	/**
-	 * @param categoria the categoria to set
-	 */
-	public void setCategoria(String categoria) {
-		this.categoria = categoria;
-	}
-
-	/**
 	 * @return the direccion
 	 */
 	public String getDireccion() {
@@ -116,16 +90,58 @@ public class universidades {
 	}
 
 	/**
-	 * @return the carrera
+	 * @return the ciudad
 	 */
-	public String getCarrera() {
-		return carrera;
+	public String getCiudad() {
+		return ciudad;
 	}
 
 	/**
-	 * @param carrera the carrera to set
+	 * @param ciudad the ciudad to set
 	 */
-	public void setCarrera(String carrera) {
-		this.carrera = carrera;
+	public void setCiudad(String ciudad) {
+		this.ciudad = ciudad;
+	}
+
+	/**
+	 * @return the programa
+	 */
+	public String getPrograma() {
+		return programa;
+	}
+
+	/**
+	 * @param programa the programa to set
+	 */
+	public void setPrograma(String programa) {
+		this.programa = programa;
+	}
+
+	/**
+	 * @return the caracteristicasChaside
+	 */
+	public String getCaracteristicasChaside() {
+		return caracteristicasChaside;
+	}
+
+	/**
+	 * @param caracteristicasChaside the caracteristicasChaside to set
+	 */
+	public void setCaracteristicasChaside(String caracteristicasChaside) {
+		this.caracteristicasChaside = caracteristicasChaside;
+	}
+
+	/**
+	 * @return the caracteristicasHolland
+	 */
+	public String getCaracteristicasHolland() {
+		return caracteristicasHolland;
+	}
+
+	/**
+	 * @param caracteristicasHolland the caracteristicasHolland to set
+	 */
+	public void setCaracteristicasHolland(String caracteristicasHolland) {
+		this.caracteristicasHolland = caracteristicasHolland;
 	}
 }
