@@ -79,8 +79,8 @@ public class ApiUniversity extends utils{
             for (PlacesSearchResult result : response.results) {
                 String[] temp = result.name.toString().split(" ");
 
-                if ((temp.length > 1) && (result.toString().toLowerCase().contains("Universidad") || result.toString().toLowerCase().contains("University") || result.toString().toLowerCase().contains("Universitaria")
-                		|| result.toString().toLowerCase().contains("institución") || result.toString().toLowerCase().contains("Institucion") || result.toString().toLowerCase().contains("Instituto"))) {
+                if ((temp.length > 1) && (result.toString().toLowerCase().contains("universidad") || result.toString().toLowerCase().contains("university") || result.toString().toLowerCase().contains("universitaria")
+                		|| result.toString().toLowerCase().contains("institución") || result.toString().toLowerCase().contains("institucion") || result.toString().toLowerCase().contains("instituto"))) {
                     searchResults.add(result.name);
                 }
             }
