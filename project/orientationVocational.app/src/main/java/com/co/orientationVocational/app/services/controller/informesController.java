@@ -8,10 +8,12 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.co.orientationVocational.app.services.implementation.logUsuarioService;
+import com.co.orientationVocational.app.services.implementation.reportsService;
 
 @RestController
 @RequestMapping("/reportes")
@@ -19,14 +21,50 @@ public class informesController {
 	@Autowired
     logUsuarioService logUsuario;
 	
+	@Autowired
+	reportsService reportService;
+	
 	@PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/usuarios")
-    public ResponseEntity<InputStreamResource> exportAllData() throws Exception{
-    	ByteArrayInputStream stream = logUsuario.exportAllData();
-    	
-    	HttpHeaders header = new HttpHeaders();
-    	header.add("Content-Disposition", "attachment; filename=usuarios.xls");
-    	
-    	return ResponseEntity.ok().headers(header).body(new InputStreamResource(stream));
-    }
+    @GetMapping("/informes/{informe}")
+    public ResponseEntity<InputStreamResource> exportAllData(@PathVariable("informe") String tipoInforme) throws Exception{		
+		HttpHeaders header = new HttpHeaders();
+		
+		String nombreArchivo = "";
+		
+		if(tipoInforme.equalsIgnoreCase("usuarios")) {
+			ByteArrayInputStream stream = logUsuario.exportAllData(tipoInforme);
+	    	
+			nombreArchivo = "attachment; filename=usuarios.xls";
+			
+	    	header.add("Content-Disposition", nombreArchivo);	
+	    	
+	    	return ResponseEntity.ok().headers(header).body(new InputStreamResource(stream));	
+		}else if(tipoInforme.equalsIgnoreCase("preguntas")) {
+			ByteArrayInputStream stream = reportService.exportAllData(tipoInforme);
+			
+			nombreArchivo = "attachment; filename=preguntas.xls";
+			
+	    	header.add("Content-Disposition", nombreArchivo);
+	    	
+	    	return ResponseEntity.ok().headers(header).body(new InputStreamResource(stream));	
+		}else if(tipoInforme.equalsIgnoreCase("universidades")) {
+			ByteArrayInputStream stream = reportService.exportAllData(tipoInforme);
+			
+			nombreArchivo = "attachment; filename=universidades.xls";
+			
+	    	header.add("Content-Disposition", nombreArchivo);
+	    	
+	    	return ResponseEntity.ok().headers(header).body(new InputStreamResource(stream));	
+		}else if(tipoInforme.equalsIgnoreCase("logs")) {
+			ByteArrayInputStream stream = reportService.exportAllData(tipoInforme);
+			
+			nombreArchivo = "attachment; filename=logs.xls";
+			
+	    	header.add("Content-Disposition", nombreArchivo);
+	    	
+	    	return ResponseEntity.ok().headers(header).body(new InputStreamResource(stream));	
+		}
+		
+		return null;
+	}
 }
