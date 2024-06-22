@@ -3,9 +3,9 @@ package com.co.orientationVocational.app.services.controller;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -20,8 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.co.orientationVocational.app.business.utils;
 import com.co.orientationVocational.app.business.test.testChaside;
-import com.co.orientationVocational.app.business.university.ApiUniversity;
-import com.co.orientationVocational.app.data.respuestaUniversidades;
 import com.co.orientationVocational.app.data.testModelResponse;
 import com.co.orientationVocational.app.services.dto.chasideQuestionDto;
 import com.co.orientationVocational.app.services.implementation.testService;
@@ -39,41 +37,19 @@ public class testChasideController extends utils {
 	testService testservice;
 	
 	@PostMapping("/result")
-	public ResponseEntity<respuestaUniversidades> resultTest(@RequestBody chasideQuestionDto chasideQuestion) throws SQLException {		
-		respuestaUniversidades universidades = new respuestaUniversidades();
-		
+	public ResponseEntity<testModelResponse> resultTest(@RequestBody chasideQuestionDto chasideQuestion) throws SQLException {		
 		testChaside chaside = new testChaside();
 		
-		LinkedList<testModelResponse> responseTest = chaside.resultTest(chasideQuestion.getTestQuestion());
+		LinkedList<testModelResponse> responseTest = chaside.resultTest(chasideQuestion.getTestQuestion(), chasideQuestion.getIdentificacion());
 		
-		insertarRegistroTest(chasideQuestion.getIdentificacion(), responseTest);
-		
-    	try {
-    		ApiUniversity Listauniversidades = new ApiUniversity();
-    		
-    		List<String> datosUsuario = userServices.ciudadValidation(chasideQuestion.getIdentificacion());
-    		
-    		datosUsuario.add("CHASIDE");
-
-    		universidades = Listauniversidades.consultaUniversidades(responseTest, datosUsuario);
-    		
-		} catch (Exception e) {
-			logger.error("Error en la busquedad de datos (API University) Datos: " + e);
-			
-			respuestaUniversidades respuestaError = new respuestaUniversidades();
-			
-			respuestaError.setRespuestaBackUp(responseTest);
-			
-			if(!esVacio(respuestaError))
-				respuestaError.setStatus(true);
-			
-			return new ResponseEntity(respuestaError, HttpStatus.OK);	
+		if(!esVacio(responseTest)) {
+			insertarRegistroTest(chasideQuestion.getIdentificacion(), responseTest, chasideQuestion.getTestQuestion());
 		}
-		
-		return new ResponseEntity(universidades, HttpStatus.OK);
+				
+		return new ResponseEntity(responseTest, HttpStatus.OK);
 	}
 	
-	private void insertarRegistroTest(String identificacion, LinkedList<testModelResponse> responseTest) throws SQLException {
+	private void insertarRegistroTest(String identificacion, LinkedList<testModelResponse> responseTest, int[] question) throws SQLException {
 		Map<String, Object> mapDatos = new HashMap<String, Object>();
 		String resultado = "";
 		String separador = "";
@@ -113,9 +89,13 @@ public class testChasideController extends utils {
 		
 		if(responseTest.isEmpty()) {
 			mapDatos.put("stObservacionTest", "El test fue realizado incorrectamente");
+			
+			logger.error("El test fue realizado incorrectamente");
 		}else {
 			mapDatos.put("stObservacionTest", "El test fue realizado correctamente");			
 		}
+		
+		mapDatos.put("respuestas", Arrays.toString(question));
 		
 		testservice.inserRegistre(mapDatos);
 	}

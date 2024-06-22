@@ -5,14 +5,16 @@ public class testModelResponse {
 	private int resultado;
 	private String areaInteres;
 	private String caracteristicas;
+	private String mensaje;
 	
 	public testModelResponse() {}
 	
-	public testModelResponse(String llave, int resultado, String areaInteres, String caracteristicas) {
+	public testModelResponse(String llave, int resultado, String areaInteres, String caracteristicas, String mensaje) {
 		this.llave = llave;
 		this.resultado = resultado;
 		this.areaInteres = areaInteres;
 		this.caracteristicas = caracteristicas;
+		this.mensaje = mensaje;
 	}
 
 	/**
@@ -69,5 +71,19 @@ public class testModelResponse {
 	 */
 	public void setCaracteristicas(String caracteristicas) {
 		this.caracteristicas = caracteristicas;
+	}
+
+	/**
+	 * @return the mensaje
+	 */
+	public String getMensaje() {
+		return mensaje;
+	}
+
+	/**
+	 * @param mensaje the mensaje to set
+	 */
+	public void setMensaje(String mensaje) {
+		this.mensaje = mensaje;
 	}
 }

@@ -4,12 +4,14 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.LinkedList;
 
 import org.springframework.stereotype.Service;
 
 import com.co.orientationVocational.app.business.utils;
 import com.co.orientationVocational.app.data.dataBase;
 import com.co.orientationVocational.app.data.modelUniversityPage;
+import com.co.orientationVocational.app.data.responseCardUniversity;
 import com.co.orientationVocational.app.services.service.universityRepository;
 
 @Service
@@ -34,7 +36,7 @@ public class universityService extends utils implements universityRepository {
 		
 		
 		try {
-			sSql.append(" SELECT id_universidad, nombre_universidad, url_pagina, direccion ")
+			sSql.append(" SELECT id_universidad, nombre_universidad, url_pagina, direccion, requisitos, puntuacion, posicion, fecha_registro, programa ")
 			.append(" FROM universidades ")
 			.append(" WHERE nombre_universidad like ? ");
 		
@@ -74,10 +76,15 @@ public class universityService extends utils implements universityRepository {
 						
 			rSet = pStm.executeQuery();
 			
-			if(rSet.next()) {
+			while(rSet.next()) {
 				result.setId(rSet.getString("id_universidad").toString());
 				result.setPaginaUrl(rSet.getString("url_pagina").toString());
 				result.setDirecciones(rSet.getString("direccion").toString());
+				result.setRequisitos(rSet.getString("requisitos").toString());
+				result.setPuntuacion(rSet.getString("puntuacion").toString());
+				result.setPosicion(rSet.getString("posicion").toString());
+				result.setFechaRegistro(rSet.getString("fecha_registro").toString());
+				result.setPrograma(rSet.getString("programa").toString());
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -114,5 +121,45 @@ public class universityService extends utils implements universityRepository {
 		}
 		
 		return pDatos;
+	}
+
+	@Override
+	public LinkedList<responseCardUniversity> informacionUniversidad(String idUniversidad, String programa) {
+		LinkedList<responseCardUniversity> university = new LinkedList<responseCardUniversity>();
+		StringBuilder sSql = new StringBuilder();
+		PreparedStatement pStm = null;
+		ResultSet rSet = null;
+		
+		try {
+			sSql.append(" SELECT titulo, semestres, valor_semestre, modalidad, director_programa ")
+			.append(" FROM informacion_universidades ")
+			.append(" WHERE id_universidad = ? ")
+			.append(" AND programa = ? ");
+												
+			pStm = connection.prepareStatement(sSql.toString());
+			
+			int i = 1;
+						
+			pStm.setObject(i++, idUniversidad.toString());
+			pStm.setObject(i++, programa.toString());
+						
+			rSet = pStm.executeQuery();
+			
+			while(rSet.next()) {
+				responseCardUniversity universidadNew = new responseCardUniversity();
+				
+				universidadNew.setTitulo(rSet.getString("titulo").toString());
+				universidadNew.setSemestres(rSet.getString("semestres").toString());
+				universidadNew.setValorSemestre(rSet.getString("valor_semestre").toString());
+				universidadNew.setModalidad(rSet.getString("modalidad").toString());
+				universidadNew.setDirectorPrograma(rSet.getString("director_programa").toString());
+				
+				university.add(universidadNew);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return university;
 	}
 }

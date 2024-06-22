@@ -1,5 +1,8 @@
 package com.co.orientationVocational.app.business;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class utils {
 	
 	public static boolean esVacio(Object pstField) {
@@ -67,4 +70,25 @@ public class utils {
         String patronEnlaceWeb = "^(http[s]?:\\/\\/)?([w]{3}\\.)?([a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,}(\\/\\S*)?$";
         return cadena.matches(patronEnlaceWeb);
     }
+	
+	public boolean compararFechas(String fecha1, String fecha2) {
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+		
+		try {
+			Date date1 = sdf.parse(fecha1);
+            Date date2 = sdf.parse(fecha2);
+            
+            long diffEnMilisegundos = date2.getTime() - date1.getTime();
+            long diffEnMeses = diffEnMilisegundos / (30L * 24L * 60L * 60L * 1000L * 60L);
+            
+            if(diffEnMeses <= 6) {
+            	return true;
+            }else {
+            	return false;
+            }
+			
+		} catch (Exception e) {
+			return false;
+		}
+	}
 }

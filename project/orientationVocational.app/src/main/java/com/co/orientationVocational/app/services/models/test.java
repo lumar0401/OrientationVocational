@@ -39,11 +39,14 @@ public class test {
 	@NotNull
 	private String detalle3;
 
+	@NotNull
+	private String respuestas;
+	
 	public test() {}
 	
 	public test(int idTest, @NotNull String identificacionUsuario, @NotNull String resultadoTest,
 			@NotNull String tipoTest, @NotNull String fechaTest, @NotNull String observacionTest,
-			@NotNull String detalle1, @NotNull String detalle2, @NotNull String detalle3) {
+			@NotNull String detalle1, @NotNull String detalle2, @NotNull String detalle3, @NotNull String respuestas) {
 		this.idTest = idTest;
 		this.identificacionUsuario = identificacionUsuario;
 		this.resultadoTest = resultadoTest;
@@ -53,6 +56,7 @@ public class test {
 		this.detalle1 = detalle1;
 		this.detalle2 = detalle2;
 		this.detalle3 = detalle3;
+		this.respuestas = respuestas;
 	}
 
 	/**
@@ -179,5 +183,19 @@ public class test {
 	 */
 	public void setDetalle3(String detalle3) {
 		this.detalle3 = detalle3;
+	}
+
+	/**
+	 * @return the respuestas
+	 */
+	public String getRespuestas() {
+		return respuestas;
+	}
+
+	/**
+	 * @param respuestas the respuestas to set
+	 */
+	public void setRespuestas(String respuestas) {
+		this.respuestas = respuestas;
 	}
 }

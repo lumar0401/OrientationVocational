@@ -4,8 +4,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.LinkedList;
-import java.util.List;
 
 import org.springframework.stereotype.Service;
 
@@ -58,12 +56,12 @@ public class userServiceImplements implements userService{
 	}
 	
 	@Override
-	public List<String> ciudadValidation(String identificacion) {
+	public String ciudadValidation(String identificacion) {
 		StringBuilder sSql = new StringBuilder();
 		PreparedStatement pStm = null;
 		ResultSet rSet = null;
 		
-		List<String> response = new LinkedList<String>();
+		String response = "";
 		
 		try {
 			sSql.append(" SELECT direccion, ciudad, identificacion ")
@@ -79,10 +77,9 @@ public class userServiceImplements implements userService{
 			rSet = pStm.executeQuery();
 			
 			if(rSet.next()) {
-				response.add(rSet.getString("identificacion"));
-				response.add(rSet.getString("ciudad"));
-				response.add(rSet.getString("direccion"));
+				response = rSet.getString("ciudad");
 			}			
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

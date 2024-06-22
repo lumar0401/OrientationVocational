@@ -1,5 +1,6 @@
 package com.co.orientationVocational.app.services.models;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -13,24 +14,38 @@ public class universidades {
 	
 	private String nombreUniversidad;
 	private String urlPagina;
+	
+	@Column(columnDefinition = "LONGTEXT")
 	private String direccion;
+	
+	@Column(columnDefinition = "LONGTEXT")
+	private String requisitos;
+	
 	private String ciudad;
 	private String programa;
 	private String caracteristicasChaside;
 	private String caracteristicasHolland;
+	private String puntuacion;
+	private String posicion;
+	private String fechaRegistro;
 	
 	public universidades() {}
 
-	public universidades(int idUniversidad, String nombreUniversidad, String urlPagina, String direccion, String ciudad,
-			String programa, String caracteristicasChaside, String caracteristicasHolland) {
+	public universidades(int idUniversidad, String nombreUniversidad, String urlPagina, String direccion, String requisitos, 
+			String ciudad, String programa, String caracteristicasChaside, String caracteristicasHolland, String puntuacion,
+			String posicion, String fechaRegistro) {
 		this.idUniversidad = idUniversidad;
 		this.nombreUniversidad = nombreUniversidad;
 		this.urlPagina = urlPagina;
 		this.direccion = direccion;
+		this.requisitos= requisitos;
 		this.ciudad = ciudad;
 		this.programa = programa;
 		this.caracteristicasChaside = caracteristicasChaside;
 		this.caracteristicasHolland = caracteristicasHolland;
+		this.puntuacion = puntuacion;
+		this.posicion = posicion;
+		this.fechaRegistro = fechaRegistro;
 	}
 
 	/**
@@ -90,6 +105,20 @@ public class universidades {
 	}
 
 	/**
+	 * @return the requisitos
+	 */
+	public String getRequisitos() {
+		return requisitos;
+	}
+
+	/**
+	 * @param requisitos the requisitos to set
+	 */
+	public void setRequisitos(String requisitos) {
+		this.requisitos = requisitos;
+	}
+
+	/**
 	 * @return the ciudad
 	 */
 	public String getCiudad() {
@@ -143,5 +172,47 @@ public class universidades {
 	 */
 	public void setCaracteristicasHolland(String caracteristicasHolland) {
 		this.caracteristicasHolland = caracteristicasHolland;
+	}
+
+	/**
+	 * @return the puntuacion
+	 */
+	public String getPuntuacion() {
+		return puntuacion;
+	}
+
+	/**
+	 * @param puntuacion the puntuacion to set
+	 */
+	public void setPuntuacion(String puntuacion) {
+		this.puntuacion = puntuacion;
+	}
+
+	/**
+	 * @return the posicion
+	 */
+	public String getPosicion() {
+		return posicion;
+	}
+
+	/**
+	 * @param posicion the posicion to set
+	 */
+	public void setPosicion(String posicion) {
+		this.posicion = posicion;
+	}
+
+	/**
+	 * @return the fechaRegistro
+	 */
+	public String getFechaRegistro() {
+		return fechaRegistro;
+	}
+
+	/**
+	 * @param fechaRegistro the fechaRegistro to set
+	 */
+	public void setFechaRegistro(String fechaRegistro) {
+		this.fechaRegistro = fechaRegistro;
 	}
 }
