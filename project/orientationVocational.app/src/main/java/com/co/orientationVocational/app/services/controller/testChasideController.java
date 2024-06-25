@@ -42,7 +42,7 @@ public class testChasideController extends utils {
 		
 		LinkedList<testModelResponse> responseTest = chaside.resultTest(chasideQuestion.getTestQuestion(), chasideQuestion.getIdentificacion());
 		
-		if(!esVacio(responseTest)) {
+		if(!responseTest.isEmpty()) {
 			insertarRegistroTest(chasideQuestion.getIdentificacion(), responseTest, chasideQuestion.getTestQuestion());
 		}
 				
@@ -77,6 +77,14 @@ public class testChasideController extends utils {
 			mapDatos.put(campoMapa, campoTemp);
 			
 			contador++;
+		}
+		
+		if(!mapDatos.containsKey("stDetalle1")) {
+			mapDatos.put("stDetalle1", "");
+		}
+		
+		if(!mapDatos.containsKey("stDetalle2")) {
+			mapDatos.put("stDetalle2", "");
 		}
 		
 		mapDatos.put("stDetalle3", "");

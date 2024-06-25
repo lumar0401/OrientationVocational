@@ -34,6 +34,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.co.orientationVocational.app.business.Mensajes;
 import com.co.orientationVocational.app.business.utils;
+import com.co.orientationVocational.app.data.infoTest;
 import com.co.orientationVocational.app.security.dto.jwtDto;
 import com.co.orientationVocational.app.security.dto.loginUsuario;
 import com.co.orientationVocational.app.security.dto.nuevoUsuario;
@@ -45,6 +46,7 @@ import com.co.orientationVocational.app.security.service.rolService;
 import com.co.orientationVocational.app.security.service.usuarioService;
 import com.co.orientationVocational.app.services.dto.usuarioDto;
 import com.co.orientationVocational.app.services.implementation.logUsuarioService;
+import com.co.orientationVocational.app.services.implementation.userServiceImplements;
 import com.google.maps.errors.ApiException;
 
 @RestController
@@ -67,6 +69,9 @@ public class authController extends utils {
     
     @Autowired
     JwtProvider jwtprovider;
+    
+    @Autowired
+    userServiceImplements servicesImplements;
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/lista")
@@ -144,6 +149,16 @@ public class authController extends utils {
     	usuario usuarioEncontrado = usuarioservice.getByIdentificacion(identificacion).get();
     	
     	return new ResponseEntity(usuarioEncontrado, HttpStatus.OK);
+    }
+    
+    @GetMapping("/obtain-test/{id}")
+    public ResponseEntity<infoTest> getByTestUsuario(@PathVariable("id") String identificacion) throws ApiException, InterruptedException, IOException{
+    	if(!usuarioservice.existsByIdentificacion(identificacion))
+			return new ResponseEntity(new Mensajes("Usuario no existe"), HttpStatus.NOT_FOUND);
+    	
+    	infoTest testUsuarioEncontrados = servicesImplements.findByTest(identificacion.toString());
+    	
+    	return new ResponseEntity(testUsuarioEncontrados, HttpStatus.OK);
     }
     
     @DeleteMapping("/delete/{identificacion}")

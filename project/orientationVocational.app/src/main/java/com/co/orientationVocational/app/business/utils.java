@@ -14,7 +14,7 @@ public class utils {
 		}
 	}
 	
-	public boolean esNumeroDouble(String valor) {
+	public static boolean esNumeroDouble(String valor) {
 		try {
 	        Double.parseDouble(valor);
 	        return true;
@@ -90,5 +90,19 @@ public class utils {
 		} catch (Exception e) {
 			return false;
 		}
+	}
+	
+	public static boolean esArregloDouble(String test) {
+		String[] args = test.replace("[", "").replace("]", "").split(",");
+		
+		try {
+			for(String elemento: args) {
+				Double.parseDouble(elemento);
+			}
+	        
+	        return true;
+	    } catch (NumberFormatException e) {
+	        return false;
+	    }
 	}
 }

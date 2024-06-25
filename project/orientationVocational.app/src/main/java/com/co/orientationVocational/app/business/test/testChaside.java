@@ -97,7 +97,7 @@ public class testChaside extends utils {
 	            result.add(test1);
 	        }
 
-	        if (entries.size() > 1) {
+	        if (entries.size() > 1 && !entries.get(1).getValue().equals(0)) {
 	            Map.Entry<String, Integer> entry2 = entries.get(1);
 	            test2.setLlave(entry2.getKey());
 	            test2.setResultado(entry2.getValue());
@@ -198,26 +198,68 @@ public class testChaside extends utils {
 	private static String correlacionTest(String identificacion, int[] questions) throws SQLException {
 		testService testservice = new testService();
 		
+		String resultadoCorrelacion = "";
+		
 		LinkedList<String> busquedadTest = testservice.testPreviosUsuario(identificacion);
+		
+		if(busquedadTest.size() < 1) {
+			return "analysis completed";
+		}
 		
 		List<double[]> tests = new ArrayList<>();
 		
 		for (String test : busquedadTest) {
-			tests.add(convertirCadenaADouble(test));
+			if(esArregloDouble(test)) {
+				tests.add(convertirCadenaADouble(test));
+			}
 		}
+		
+		List<double[]> busquedadTestFinal = ListArrayComplement(tests);
+		
+		double[] test1 = convertirArregloADouble(questions);
+		
+		List<double[]> busquedadCorrelacionFinal = ArrayComplement(busquedadTestFinal, test1);
 		
 		PearsonsCorrelation correlacion = new PearsonsCorrelation();
-		
 		List<Double> correlaciones = new ArrayList<>();
 		
-		double[] test1 = tests.get(0);
-		
-		for (int i = 0; i < tests.size(); i++) {
-			double correlacionTest = correlacion.correlation(test1, tests.get(i));
-			correlaciones.add(correlacionTest);
+		if(!busquedadCorrelacionFinal.isEmpty()) {
+			for (int i = 0; i < (busquedadCorrelacionFinal.size() - 1); i++) {
+				double correlacionTest = correlacion.correlation(busquedadCorrelacionFinal.get(busquedadCorrelacionFinal.size() - 1), busquedadCorrelacionFinal.get(i));
+				correlaciones.add(correlacionTest);
+			}
 		}
 		
-		return null;
+		resultadoCorrelacion = resultadoCorrelacion(correlaciones);
+		
+		return resultadoCorrelacion;
+	}
+	
+	private static List<double[]> ArrayComplement(List<double[]> busquedadTest, double[] question) {
+		if (question.length > busquedadTest.get(0).length) {
+	        busquedadTest.add(Arrays.copyOf(question, question.length));
+	    } else if (question.length < busquedadTest.get(0).length) {
+	        double[] newArray = Arrays.copyOf(question, busquedadTest.get(0).length);
+	        busquedadTest.add(newArray);
+	    } else {
+	        busquedadTest.add(question);
+	    }
+	    
+	    return busquedadTest;
+	}
+	
+	private static List<double[]> ListArrayComplement(List<double[]> busquedadTest) {
+		int maxSize = busquedadTest.stream().mapToInt(arr -> arr.length).max().orElse(0);
+		
+		return busquedadTest.stream()
+				.map(arr -> {
+					if(arr.length < maxSize) {
+						return Arrays.copyOf(arr, maxSize);
+					}else {
+						return arr;
+					}
+				})
+				.collect(Collectors.toList());
 	}
 	
 	private static double[] convertirCadenaADouble(String cadena) {
@@ -229,6 +271,63 @@ public class testChaside extends utils {
 		}
 		
 		return arregloDouble;
+	}
+	
+	private static double[] convertirArregloADouble(int[] numeros) {
+	    double[] arregloDouble = new double[numeros.length];
+	    
+	    for (int i = 0; i < numeros.length; i++) {
+	        arregloDouble[i] = (double) numeros[i];
+	    }
+	    
+	    return arregloDouble;
+	}
+	
+	private static String resultadoCorrelacion(List<Double> correlaciones) {
+		HashMap<Double, Integer> frecuencia = new HashMap<Double, Integer>();
+		
+		String resultadoAnalisis = "";
+		
+		for (double datos : correlaciones) {
+			if(frecuencia.containsKey(datos)) {
+				frecuencia.put(datos, frecuencia.get(datos) + 1);
+			}else {
+				frecuencia.put(datos, 1);
+			}
+		}
+		
+		double valorMasFrecuente = 0.0;
+		int maxFrecuencia = 0;
+		
+		for (double key : frecuencia.keySet()) {
+			if(frecuencia.get(key) > maxFrecuencia) {
+				valorMasFrecuente = key;
+				maxFrecuencia = frecuencia.get(key);
+			}
+		}
+		
+		if(valorMasFrecuente < -0.9) {
+			resultadoAnalisis = "De acuerdo al analisis y proyeccion no hay una ninguna relación entre los resultados generados por el test"
+					+ " y los aptitudes del usuario, así mismo se encuentra una relación nula entre la especialidad y el interes vocacional"
+					+ " Se recomienda realizar nuevamente la prueba, recuerde que se debe realizar a consciencia y puede tomarse el"
+					+ " tiempo necesario.";
+		}else if(valorMasFrecuente > -0.99 && valorMasFrecuente < -0.01) {
+			resultadoAnalisis = "De acuerdo al analisis y entre los diferentes test realizados, se encuentra una relación limitada entre los"
+					+ " conocimientos del usuario y las actitudes e intereses, al tenes un relacion baja es recomendable revisar documentacion"
+					+ " de las diferentes carreras, una vez encontrado nueva información es recomendable realizar nuevament el test";
+		}else if(valorMasFrecuente > 0.0 && valorMasFrecuente < 0.99) {
+			resultadoAnalisis = "Tras un análisis y la realización de diversos tests, se ha identificado una relación significativa entre el "
+					+ "nivel de conocimientos del usuario y sus actitudes e intereses. Aunque la correlación es moderada, se sugiere explorar "
+					+ "la documentación sobre las diferentes carreras para obtener una perspectiva más completa. Al obtener nueva información, "
+					+ "se recomienda volver a realizar el test para afinar aún más la evaluación";
+		}else if(valorMasFrecuente >= 1.0) {
+			resultadoAnalisis = "De acuerdo a los test de orientación vocacional, el usuario cuenta con una alta relación entre los intereses "
+					+ "y los requisitos de la carrera universitaria.";
+		}else {
+			resultadoAnalisis = "Error al realizar el analisis de Correlación Pearsons";
+		}
+		
+		return resultadoAnalisis;
 	}
 	
 	public enum comparation{
