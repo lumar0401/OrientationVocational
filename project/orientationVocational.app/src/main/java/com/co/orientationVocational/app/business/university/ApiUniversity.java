@@ -317,6 +317,10 @@ public class ApiUniversity extends utils {
 				
 				if (!esVacio(responseCard)) {
 					for (responseCardUniversity responseCardUniversity : responseCard) {
+						if(!esVacio(pDatos.getNombreUniversidad())) {
+							responseCardUniversity.setNombreUniversidad(pDatos.getNombreUniversidad());
+						}
+						
 						
 						if (!esVacio(pDatos.getRequisitos())) {
 							List<String> lista = Arrays.asList(pDatos.getRequisitos().split(" & "));
@@ -355,7 +359,7 @@ public class ApiUniversity extends utils {
 							
 							if (!esVacio(cadenaDatos)) {
 								responseWebScraping.putAll(scraping.webScrapingData(pDatos.getPaginaUrl().toString(), cadenaDatos));
-								responseCard.add(responseUniversity(responseWebScraping, pDatos.getDirecciones(), pDatos.getRequisitos()));		
+								responseCard.add(responseUniversity(responseWebScraping, pDatos.getDirecciones(), pDatos.getRequisitos(), pDatos.getNombreUniversidad()));		
 							}
 						} catch (SQLException e) {
 							e.printStackTrace();
@@ -389,7 +393,7 @@ public class ApiUniversity extends utils {
 		return null;
 	}
 
-	private responseCardUniversity responseUniversity(Map<String, String> pDatos, String direcciones, String requisitos) {
+	private responseCardUniversity responseUniversity(Map<String, String> pDatos, String direcciones, String requisitos, String nombreUniversidad) {
 		responseCardUniversity response = new responseCardUniversity();
 
 		if (pDatos.isEmpty()) {
@@ -397,11 +401,16 @@ public class ApiUniversity extends utils {
 		}
 
 		response.setTitulo(pDatos.getOrDefault("titulo", ""));
+		response.setNombreUniversidad(pDatos.getOrDefault("nombre_universidad", ""));
 		response.setSemestres(pDatos.getOrDefault("semestres", ""));
 		response.setValorSemestre(pDatos.getOrDefault("valorSemestre", ""));
 		response.setModalidad(pDatos.getOrDefault("modalidad", ""));
 		response.setDirectorPrograma(pDatos.getOrDefault("directorPrograma", ""));
 
+		if(!esVacio(nombreUniversidad)) {
+			response.setNombreUniversidad(nombreUniversidad);
+		}
+		
 		if (!esVacio(requisitos)) {
 			List<String> lista = Arrays.asList(requisitos.split(" & "));
 			response.setRequisitos(lista);

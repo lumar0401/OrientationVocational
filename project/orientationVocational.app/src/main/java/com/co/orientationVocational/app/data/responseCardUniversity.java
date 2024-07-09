@@ -3,6 +3,7 @@ package com.co.orientationVocational.app.data;
 import java.util.List;
 
 public class responseCardUniversity {
+	private String nombreUniversidad;
 	private String titulo;
 	private String semestres;
 	private String valorSemestre;
@@ -13,8 +14,9 @@ public class responseCardUniversity {
 	
 	public responseCardUniversity() {}
 
-	public responseCardUniversity(String titulo, String semestres, String valorSemestre, String modalidad, 
+	public responseCardUniversity(String nombreUniversidad, String titulo, String semestres, String valorSemestre, String modalidad, 
 			String directorPrograma, List<String> requisitos, List<String> direcciones) {
+		this.nombreUniversidad = nombreUniversidad;
 		this.titulo = titulo;
 		this.semestres = semestres;
 		this.valorSemestre = valorSemestre;
@@ -22,6 +24,20 @@ public class responseCardUniversity {
 		this.directorPrograma = directorPrograma;
 		this.requisitos = requisitos;
 		this.direcciones = direcciones;
+	}
+	
+	/**
+	 * @return the nombreUniversidad
+	 */
+	public String getNombreUniversidad() {
+		return nombreUniversidad;
+	}
+
+	/**
+	 * @param nombreUniversidad the nombreUniversidad to set
+	 */
+	public void setNombreUniversidad(String nombreUniversidad) {
+		this.nombreUniversidad = nombreUniversidad;
 	}
 
 	/**

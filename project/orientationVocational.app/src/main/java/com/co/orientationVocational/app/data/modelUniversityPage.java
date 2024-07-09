@@ -2,6 +2,7 @@ package com.co.orientationVocational.app.data;
 
 public class modelUniversityPage {
 	private String id;
+	private String nombreUniversidad;
 	private String paginaUrl;
 	private String direcciones;
 	private String requisitos;
@@ -12,9 +13,10 @@ public class modelUniversityPage {
 	
 	public modelUniversityPage() {}
 	
-	public modelUniversityPage(String id, String paginaUrl, String direcciones, String requisitos, String puntuacion, String posicion, String fechaRegistro,
+	public modelUniversityPage(String id, String nombreUniversidad, String paginaUrl, String direcciones, String requisitos, String puntuacion, String posicion, String fechaRegistro,
 			String programa) {
 		this.id = id;
+		this.nombreUniversidad = nombreUniversidad;
 		this.paginaUrl = paginaUrl;
 		this.direcciones = direcciones;
 		this.requisitos = requisitos;
@@ -36,6 +38,20 @@ public class modelUniversityPage {
 	 */
 	public void setId(String id) {
 		this.id = id;
+	}
+	
+	/**
+	 * @return the nombreUniversidad
+	 */
+	public String getNombreUniversidad() {
+		return nombreUniversidad;
+	}
+
+	/**
+	 * @param nombreUniversidad the nombreUniversidad to set
+	 */
+	public void setNombreUniversidad(String nombreUniversidad) {
+		this.nombreUniversidad = nombreUniversidad;
 	}
 
 	/**

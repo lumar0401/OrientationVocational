@@ -78,6 +78,7 @@ public class universityService extends utils implements universityRepository {
 				
 				while(rSet.next()) {
 					result.setId(rSet.getString("id_universidad").toString());
+					result.setNombreUniversidad(rSet.getString("nombre_universidad"));
 					result.setPaginaUrl(rSet.getString("url_pagina").toString());
 					result.setDirecciones(rSet.getString("direccion").toString());
 					result.setRequisitos(rSet.getString("requisitos").toString());

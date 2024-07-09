@@ -5,7 +5,6 @@ import javax.persistence.Column;
 import org.springframework.lang.NonNull;
 
 public class universidadesDto {
-	@NonNull
 	private int idUniversidad;
 	
 	@Column(columnDefinition = "LONGTEXT")
