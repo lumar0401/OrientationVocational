@@ -115,6 +115,27 @@ public class userServiceImplements implements userService{
 			while (rSet.next()) {
 				testUsuarios.setTest(rSet.getString("cantidad"));
 			}
+			
+			sSql.append(" SELECT identificacion_usuario, COUNT(*) AS cantidad ")
+		    .append(" FROM test ")
+		    .append(" WHERE identificacion_usuario = ? ")
+		    .append(" AND observacion_test like '%El test fue realizado correctamente%' ")
+			.append(" GROUP BY identificacion_usuario ")
+			.append(" ORDER BY COUNT(*) DESC ");
+			
+			pStm = connection.prepareStatement(sSql.toString());
+			
+			i = 1;
+			
+			pStm.setObject(i++, identificacion.toString());
+			
+			rSet = pStm.executeQuery();
+			
+			while (rSet.next()) {
+				testUsuarios.setTest(rSet.getString("cantidad"));
+			}
+			
+			
 		}catch (Exception e) {
 			e.printStackTrace();
 		}

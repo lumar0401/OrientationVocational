@@ -34,60 +34,61 @@ public class universityService extends utils implements universityRepository {
 		
 		String[] interesestemp = (!esVacio(intereses)) ? intereses.split(",") : new String[0];
 		
-		
-		try {
-			sSql.append(" SELECT id_universidad, nombre_universidad, url_pagina, direccion, requisitos, puntuacion, posicion, fecha_registro, programa ")
-			.append(" FROM universidades ")
-			.append(" WHERE nombre_universidad like ? ");
-		
-			for (int j = 1; j < datosTemp.length; j++) {
-				sSql.append(" AND nombre_universidad like ? ");
-			}
+		if(!esVacio(datos)) {
+			try {
+				sSql.append(" SELECT id_universidad, nombre_universidad, url_pagina, direccion, requisitos, puntuacion, posicion, fecha_registro, programa ")
+				.append(" FROM universidades ")
+				.append(" WHERE nombre_universidad like ? ");
 			
-			if(intereses.length() > 1) {
-				String columnName = (test.toString().toLowerCase().equals("chaside")) ? "caracteristicas_chaside" : "caracteristicas_holland";
-				
-				sSql.append(" AND (");
-				
-				for (int j = 0; j < interesestemp.length; j++) {
-					if(j == 0) {
-						sSql.append(columnName + " = '" + interesestemp[j] + "'");
-					}else {
-						sSql.append(" OR " + columnName + " = '" + interesestemp[j] + "' ");
-					}
-					
+				for (int j = 1; j < datosTemp.length; j++) {
+					sSql.append(" AND nombre_universidad like ? ");
 				}
 				
-				sSql.append(")");
-			}
-												
-			pStm = connection.prepareStatement(sSql.toString());
-			
-			int i = 1;
-			
-			format = "%" + datosTemp[0].toString() + "%";
-			
-			pStm.setObject(i++, format.toString());
-		
-			for (int j = 1; j < datosTemp.length; j++) {
-				format = "%" + datosTemp[j].toString() + "%";
-				pStm.setObject(i++, format.toString());
-			}
+				if(intereses.length() > 1) {
+					String columnName = (test.toString().toLowerCase().equals("chaside")) ? "caracteristicas_chaside" : "caracteristicas_holland";
+					
+					sSql.append(" AND (");
+					
+					for (int j = 0; j < interesestemp.length; j++) {
+						if(j == 0) {
+							sSql.append(columnName + " = '" + interesestemp[j] + "'");
+						}else {
+							sSql.append(" OR " + columnName + " = '" + interesestemp[j] + "' ");
+						}
 						
-			rSet = pStm.executeQuery();
+					}
+					
+					sSql.append(")");
+				}
+													
+				pStm = connection.prepareStatement(sSql.toString());
+				
+				int i = 1;
+				
+				format = "%" + datosTemp[0].toString() + "%";
+				
+				pStm.setObject(i++, format.toString());
 			
-			while(rSet.next()) {
-				result.setId(rSet.getString("id_universidad").toString());
-				result.setPaginaUrl(rSet.getString("url_pagina").toString());
-				result.setDirecciones(rSet.getString("direccion").toString());
-				result.setRequisitos(rSet.getString("requisitos").toString());
-				result.setPuntuacion(rSet.getString("puntuacion").toString());
-				result.setPosicion(rSet.getString("posicion").toString());
-				result.setFechaRegistro(rSet.getString("fecha_registro").toString());
-				result.setPrograma(rSet.getString("programa").toString());
+				for (int j = 1; j < datosTemp.length; j++) {
+					format = "%" + datosTemp[j].toString() + "%";
+					pStm.setObject(i++, format.toString());
+				}
+							
+				rSet = pStm.executeQuery();
+				
+				while(rSet.next()) {
+					result.setId(rSet.getString("id_universidad").toString());
+					result.setPaginaUrl(rSet.getString("url_pagina").toString());
+					result.setDirecciones(rSet.getString("direccion").toString());
+					result.setRequisitos(rSet.getString("requisitos").toString());
+					result.setPuntuacion(rSet.getString("puntuacion").toString());
+					result.setPosicion(rSet.getString("posicion").toString());
+					result.setFechaRegistro(rSet.getString("fecha_registro").toString());
+					result.setPrograma(rSet.getString("programa").toString());
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
 			}
-		} catch (SQLException e) {
-			e.printStackTrace();
 		}
 		
 		return result;
