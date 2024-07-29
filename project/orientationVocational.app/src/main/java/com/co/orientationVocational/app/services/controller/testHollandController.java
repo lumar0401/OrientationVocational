@@ -3,6 +3,7 @@ package com.co.orientationVocational.app.services.controller;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
@@ -34,14 +35,14 @@ public class testHollandController {
 	public ResponseEntity<LinkedList<testModelResponse>> resultTest(@RequestBody hollandQuestionDto hollandQuestion) throws SQLException {		
 		testHolland holland = new testHolland();
 		
-		LinkedList<testModelResponse>  responseTest = holland.resultTest(hollandQuestion.getTestQuestion());
+		LinkedList<testModelResponse>  responseTest = holland.resultTest(hollandQuestion.getTestQuestion(), hollandQuestion.getIdentificacion());
 		
-		insertarRegistroTest(hollandQuestion.getIdentificacion(), responseTest);
+		insertarRegistroTest(hollandQuestion.getIdentificacion(), responseTest, hollandQuestion.getTestQuestion());
     	
 		return new ResponseEntity(responseTest, HttpStatus.OK);
 	}
 	
-	private void insertarRegistroTest(String identificacion, LinkedList<testModelResponse> responseTest) throws SQLException {
+	private void insertarRegistroTest(String identificacion, LinkedList<testModelResponse> responseTest, int[] question) throws SQLException {
 		Map<String, Object> mapDatos = new HashMap<String, Object>();
 		String resultado = "";
 		String separador = "";
@@ -95,6 +96,8 @@ public class testHollandController {
 		}else {
 			mapDatos.put("stObservacionTest", "El test fue realizado correctamente");			
 		}
+		
+		mapDatos.put("respuestas", Arrays.toString(question));
 		
 		testservice.inserRegistre(mapDatos);
 	}

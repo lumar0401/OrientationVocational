@@ -23,5 +23,4 @@ public class userController {
 		
 		return ingresoExitoso;
 	}
-
 }

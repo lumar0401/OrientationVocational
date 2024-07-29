@@ -1,5 +1,7 @@
 package com.co.orientationVocational.app.services.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Repository;
 
 import com.co.orientationVocational.app.data.infoTest;
@@ -8,5 +10,6 @@ import com.co.orientationVocational.app.data.infoTest;
 public interface userService {
 	public int loginValidation(String identificacion);
 	public String ciudadValidation(String identificacion);
-	infoTest findByTest(String identificacion);
+	int loginValidationCoordenadas(String identificacion);
+	List<String> findByTest(String identificacion, String test);
 }

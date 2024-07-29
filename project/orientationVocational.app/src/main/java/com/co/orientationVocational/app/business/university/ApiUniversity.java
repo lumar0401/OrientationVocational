@@ -80,7 +80,7 @@ public class ApiUniversity extends utils {
 			
 			String[] coordenadas = infoUsuario.selectUbicacionUsuario(identificacion);
 			
-			if(!esVacio(coordenadas)) {
+			if(coordenadas[0] != null && coordenadas[1] != null) {
 				double latitud = Double.parseDouble(coordenadas[0]);
 				double longitud = Double.parseDouble(coordenadas[1]);
 				int radio = 30000;
@@ -145,8 +145,12 @@ public class ApiUniversity extends utils {
 		mapUniversity.put("stCategorias", responseTest);
 		mapUniversity.put("stUniversidades", universidades);
 
-		if (!esVacio(responseTest)) {
+		if (!esVacio(responseTest) && mapUniversity.get("stTest").equals("chaside")) {
 			intereses = equivalenciaIntereses(responseTest, mapUniversity.get("stTest").toString());
+		}else {
+			if (!esVacio(responseTest)){
+				intereses = responseTest;
+			}
 		}
 		
 		Map<String, modelUniversityPage> pDatos = consultaUrlUniversidad(searchOne, intereses, mapUniversity.get("stTest").toString());
@@ -287,8 +291,6 @@ public class ApiUniversity extends utils {
 				resultBuilder.append("");
 				break;
 			}
-		} else if (test.toLowerCase().equals("holland")) {
-			// Lógica para el caso "holland" (se puede agregar según sea necesario)
 		}
 
 		if (resultBuilder.length() > 0 && resultBuilder.charAt(resultBuilder.length() - 1) == ',') {
@@ -462,9 +464,11 @@ public class ApiUniversity extends utils {
 		double longitud = 0.0;
 		
 		String searchResults = "";
+		
+		String[] busquedaFinal = busqueda.split(";");
 
 		try {
-			TextSearchRequest request = PlacesApi.textSearchQuery(context, "ubicacion").query(busqueda);
+			TextSearchRequest request = PlacesApi.textSearchQuery(context, "ubicacion").query(busquedaFinal[1]);
 			PlacesSearchResponse response = request.await();
 
 			for (PlacesSearchResult result : response.results) {				

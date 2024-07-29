@@ -6,6 +6,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -172,7 +173,7 @@ public class authController extends utils {
     	if(!usuarioservice.existsByIdentificacion(identificacion))
 			return new ResponseEntity(new Mensajes("Usuario no existe"), HttpStatus.NOT_FOUND);
     	
-    	infoTest testUsuarioEncontrados = servicesImplements.findByTest(identificacion.toString());
+    	List<infoTest> testUsuarioEncontrados = datosPorcentajeTest(identificacion);
     	
     	return new ResponseEntity(testUsuarioEncontrados, HttpStatus.OK);
     }
@@ -313,7 +314,14 @@ public class authController extends utils {
         	if(operacion.equalsIgnoreCase("insert")) {
         		response = logUsuario.insertUbicacionUsuario(identificacion + "," + datosRegistro);
         	}else if(operacion.equalsIgnoreCase("update")) {
-        		response = logUsuario.updateUbicacionUsuario(identificacion + "," + datosRegistro);
+        		int validacionUsuario = servicesImplements.loginValidationCoordenadas(identificacion);
+        		
+        		if(validacionUsuario == 1) {
+        			response = logUsuario.updateUbicacionUsuario(identificacion + "," + datosRegistro);
+        		}else {
+        			datosRegistro += "," + identificacion;
+        			response = logUsuario.insertUbicacionUsuario(identificacion + "," + datosRegistro);
+        		}
         	}
         	        	
 		} catch (Exception e) {			
@@ -323,5 +331,153 @@ public class authController extends utils {
 		}
     	
     	return response;
+    }
+    
+    private List<infoTest> datosPorcentajeTest(String identificacion) {
+    	List<infoTest> response = new LinkedList<infoTest>();
+    	
+    	try {
+    		List<String> testChaside = servicesImplements.findByTest(identificacion.toString(), "chaside");
+    		List<String> testHolland = servicesImplements.findByTest(identificacion.toString(), "holland");
+    				   		
+    		int cantidadChaside = obtenerCantidadTotal(testChaside);
+    		int cantidadHolland = obtenerCantidadTotal(testHolland);
+    		
+    		response = organizarRespuesta(cantidadChaside, cantidadHolland, testChaside, testHolland);         	
+		} catch (Exception e) {			
+			logger.error("Error obteniendo datos test, Informacion: " + e);
+		}
+    	
+    	return response;
+    }
+    
+    private int obtenerCantidadTotal(List<String> testList) {
+        int cantidadTotal = 0;
+        
+        for (String test : testList) {
+            String[] temp = test.split(",");
+            cantidadTotal += Integer.parseInt(temp[1]);
+        }
+
+        return cantidadTotal;
+    }
+    
+    private List<infoTest> organizarRespuesta(int cantidadChaside, int cantidadHolland, List<String> testChaside, List<String> testHolland){
+    	List<infoTest> response = new LinkedList<infoTest>();
+    	
+    	double porcentajeChaside1 = 0.0;
+    	double porcentajeChaside2 = 0.0;
+    	
+    	int contador = 0;
+    	
+    	for (String string : testChaside) {
+			String[] temp = string.split(",");
+			
+			if(contador == 0) {
+				porcentajeChaside1 = (Integer.valueOf(temp[1]) * 100.0) / cantidadChaside;
+				
+				infoTest info  = new infoTest();
+				
+				info.setTest("Chaside");
+				info.setPorcentaje(porcentajeChaside1);
+				
+				String[] aux = temp[0].split("-");
+				
+				info.setPerfilProfesional(equivalencia(aux[0],"Chaside"));
+				
+				response.add(info);
+			}else {
+				porcentajeChaside2 = (Integer.valueOf(temp[1]) * 100.0) / cantidadChaside;
+				
+				infoTest info  = new infoTest();
+				
+				info.setTest("Chaside");
+				info.setPorcentaje(porcentajeChaside2);
+				
+				String[] aux = temp[0].split("-");
+				
+				info.setPerfilProfesional(equivalencia(aux[0],"Chaside"));
+				
+				response.add(info);
+			}
+		}
+    	
+    	contador = 0;
+    	
+    	double porcentajeHalland1 = 0.0;
+    	double porcentajeHalland2 = 0.0;
+    	double porcentajeHalland3 = 0.0;
+    	
+    	for (String string : testHolland) {
+			String[] temp = string.split(",");
+			
+			if(contador == 0) {
+				porcentajeHalland1 = (Integer.valueOf(temp[1]) * 100.0) / cantidadHolland;
+				
+				infoTest info  = new infoTest();
+				
+				info.setTest("Holland");
+				info.setPorcentaje(porcentajeHalland1);
+				
+				String[] aux = temp[0].split("-");
+				
+				info.setPerfilProfesional(aux[0]);
+				
+				response.add(info);
+			}else if(contador == 1) {
+				porcentajeHalland2 = (Integer.valueOf(temp[1]) * 100.0) / cantidadHolland;
+				
+				infoTest info  = new infoTest();
+				
+				info.setTest("Holland");
+				info.setPorcentaje(porcentajeHalland2);
+				
+				String[] aux = temp[0].split("-");
+				
+				info.setPerfilProfesional(aux[0]);
+				
+				response.add(info);
+			}else {
+				porcentajeHalland3 = (Integer.valueOf(temp[1]) * 100.0) / cantidadHolland;
+				
+				infoTest info  = new infoTest();
+				
+				info.setTest("Holland");
+				info.setPorcentaje(porcentajeHalland3);
+				
+				String[] aux = temp[0].split("-");
+				
+				info.setPerfilProfesional(aux[0]);
+				
+				response.add(info);
+			}
+		}
+    	
+    	return response;
+    }
+    
+    private String equivalencia(String valor,String test) {
+    	if(test.contentEquals("Chaside")) {
+    		switch (valor) {
+			case "C":
+				return "Area Administrativa";
+			case "H":
+				return "Area Humanidades y Ciencias Sociales y Jurídicas";
+			case "A":
+				return "Area Artística";
+			case "S":
+				return "Area de Ciencias de la Salud";
+			case "I":
+				return "Area Enseñanzas Técnicas";
+			case "D":
+				return "Area de Defensa y Seguridad";
+			case "E":
+				return "Area de Ciencias Ecperimentales";
+			default:
+				return "";
+			}
+    	}
+    	
+    	return "";
     }
 }

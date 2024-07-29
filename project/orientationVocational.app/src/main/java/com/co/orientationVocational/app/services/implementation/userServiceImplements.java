@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 
@@ -89,57 +91,171 @@ public class userServiceImplements implements userService{
 	}
 
 	@Override
-	public infoTest findByTest(String identificacion){
+	public List<String> findByTest(String identificacion, String test){
 		StringBuilder sSql = new StringBuilder();
 		PreparedStatement pStm = null;
 		ResultSet rSet = null;
 		
-		infoTest testUsuarios = new infoTest();
+		List<String> testUsuarios = new LinkedList<String>();
 		
 		try {
-			sSql.append(" SELECT identificacion_usuario, COUNT(*) AS cantidad ")
-		    .append(" FROM test ")
-		    .append(" WHERE identificacion_usuario = ? ")
-		    .append(" AND observacion_test like '%El test fue realizado correctamente%' ")
-			.append(" GROUP BY identificacion_usuario ")
-			.append(" ORDER BY COUNT(*) DESC ");
-			
-			pStm = connection.prepareStatement(sSql.toString());
-			
-			int i = 1;
-			
-			pStm.setObject(i++, identificacion.toString());
-			
-			rSet = pStm.executeQuery();
-			
-			while (rSet.next()) {
-				testUsuarios.setTest(rSet.getString("cantidad"));
+			if(test.equals("chaside")) {
+				sSql.append(" SELECT detalle1, COUNT(detalle1) AS cantidad ")
+			    .append(" FROM test ")
+			    .append(" WHERE identificacion_usuario = ? ")
+			    .append(" AND tipo_test = 'Test Chaside' ")
+			    .append(" AND observacion_test like '%El test fue realizado correctamente%' ")
+				.append(" GROUP BY detalle1 ")
+				.append(" ORDER BY cantidad DESC ")
+				.append(" LIMIT 1 ");
+				
+				pStm = connection.prepareStatement(sSql.toString());
+				
+				int i = 1;
+				
+				pStm.setObject(i++, identificacion.toString());
+				
+				rSet = pStm.executeQuery();
+				
+				while (rSet.next()) {
+					String temp = rSet.getString("detalle1") + "," + rSet.getString("cantidad"); 
+					testUsuarios.add(temp);
+				}
+				
+				sSql = new StringBuilder();
+				
+				sSql.append(" SELECT detalle2, COUNT(detalle2) AS cantidad2 ")
+			    .append(" FROM test ")
+			    .append(" WHERE identificacion_usuario = ? ")
+			    .append(" AND tipo_test = 'Test Chaside' ")
+			    .append(" AND observacion_test like '%El test fue realizado correctamente%' ")
+				.append(" GROUP BY detalle2 ")
+				.append(" ORDER BY cantidad2 DESC ")
+				.append(" LIMIT 1 ");
+				
+				pStm = connection.prepareStatement(sSql.toString());
+				
+				i = 1;
+				
+				pStm.setObject(i++, identificacion.toString());
+				
+				rSet = pStm.executeQuery();
+				
+				while (rSet.next()) {
+					String temp = rSet.getString("detalle2") + "," + rSet.getString("cantidad2"); 
+					testUsuarios.add(temp);
+				}
+			}else if(test.equals("holland")) {
+				sSql.append(" SELECT detalle1, COUNT(detalle1) AS cantidad ")
+			    .append(" FROM test ")
+			    .append(" WHERE identificacion_usuario = ? ")
+			    .append(" AND tipo_test = 'Test Holland' ")
+			    .append(" AND observacion_test like '%El test fue realizado correctamente%' ")
+				.append(" GROUP BY detalle1 ")
+				.append(" ORDER BY cantidad DESC ")
+				.append(" LIMIT 1 ");
+				
+				pStm = connection.prepareStatement(sSql.toString());
+				
+				int i = 1;
+				
+				pStm.setObject(i++, identificacion.toString());
+				
+				rSet = pStm.executeQuery();
+				
+				while (rSet.next()) {
+					String temp = rSet.getString("detalle1") + "," + rSet.getString("cantidad"); 
+					testUsuarios.add(temp);
+				}
+				
+				sSql = new StringBuilder();
+				
+				sSql.append(" SELECT detalle2, COUNT(detalle2) AS cantidad2 ")
+			    .append(" FROM test ")
+			    .append(" WHERE identificacion_usuario = ? ")
+			    .append(" AND tipo_test = 'Test Holland' ")
+			    .append(" AND observacion_test like '%El test fue realizado correctamente%' ")
+				.append(" GROUP BY detalle2 ")
+				.append(" ORDER BY cantidad2 DESC ")
+				.append(" LIMIT 1 ");
+				
+				pStm = connection.prepareStatement(sSql.toString());
+				
+				i = 1;
+				
+				pStm.setObject(i++, identificacion.toString());
+				
+				rSet = pStm.executeQuery();
+				
+				while (rSet.next()) {
+					String temp = rSet.getString("detalle2") + "," + rSet.getString("cantidad2"); 
+					testUsuarios.add(temp);
+				}
+				
+				sSql = new StringBuilder();
+				
+				sSql.append(" SELECT detalle3, COUNT(detalle3) AS cantidad3 ")
+			    .append(" FROM test ")
+			    .append(" WHERE identificacion_usuario = ? ")
+			    .append(" AND tipo_test = 'Test Holland' ")
+			    .append(" AND observacion_test like '%El test fue realizado correctamente%' ")
+				.append(" GROUP BY detalle3 ")
+				.append(" ORDER BY cantidad3 DESC ")
+				.append(" LIMIT 1 ");
+				
+				pStm = connection.prepareStatement(sSql.toString());
+				
+				i = 1;
+				
+				pStm.setObject(i++, identificacion.toString());
+				
+				rSet = pStm.executeQuery();
+				
+				while (rSet.next()) {
+					String temp = rSet.getString("detalle3") + "," + rSet.getString("cantidad3"); 
+					testUsuarios.add(temp);
+				}
 			}
-			
-			sSql.append(" SELECT identificacion_usuario, COUNT(*) AS cantidad ")
-		    .append(" FROM test ")
-		    .append(" WHERE identificacion_usuario = ? ")
-		    .append(" AND observacion_test like '%El test fue realizado correctamente%' ")
-			.append(" GROUP BY identificacion_usuario ")
-			.append(" ORDER BY COUNT(*) DESC ");
-			
-			pStm = connection.prepareStatement(sSql.toString());
-			
-			i = 1;
-			
-			pStm.setObject(i++, identificacion.toString());
-			
-			rSet = pStm.executeQuery();
-			
-			while (rSet.next()) {
-				testUsuarios.setTest(rSet.getString("cantidad"));
-			}
-			
-			
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
 		
 		return testUsuarios;		
+	}
+	
+	@Override
+	public int loginValidationCoordenadas(String identificacion) {
+		StringBuilder sSql = new StringBuilder();
+		PreparedStatement pStm = null;
+		ResultSet rSet = null;
+		
+		int ingreso = 0;
+		
+		try {
+			sSql.append(" SELECT * ")
+			.append(" FROM ubicacion_usuario ")
+			.append(" WHERE identificacion_usuario = ? ");
+			
+			pStm = connection.prepareStatement(sSql.toString());
+			
+			int i = 1;
+			
+			pStm.setObject(i++, identificacion.toString()); 
+			
+			rSet = pStm.executeQuery();
+			
+			if(rSet.next()) {
+				if(rSet.getString("identificacion").equals(identificacion)) {
+					ingreso = 1;
+				}else {
+					ingreso = 0;
+				}
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return ingreso;
 	}
 }

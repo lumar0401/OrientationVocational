@@ -214,7 +214,7 @@ public class testChaside extends utils {
 			}
 		}
 		
-		List<double[]> busquedadTestFinal = ListArrayComplement(tests);
+		List<double[]> busquedadTestFinal = ListArrayComplement(tests, questions.length);
 		
 		double[] test1 = convertirArregloADouble(questions);
 		
@@ -248,8 +248,14 @@ public class testChaside extends utils {
 	    return busquedadTest;
 	}
 	
-	private static List<double[]> ListArrayComplement(List<double[]> busquedadTest) {
-		int maxSize = busquedadTest.stream().mapToInt(arr -> arr.length).max().orElse(0);
+	private static List<double[]> ListArrayComplement(List<double[]> busquedadTest, int size) {
+		int valorArreglo = busquedadTest.stream().mapToInt(arr -> arr.length).max().orElse(0);
+		
+		if(size > valorArreglo) {
+			valorArreglo = size;
+		}
+		
+		int maxSize = valorArreglo;
 		
 		return busquedadTest.stream()
 				.map(arr -> {

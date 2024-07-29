@@ -2,20 +2,15 @@ package com.co.orientationVocational.app.data;
 
 public class infoTest {
 	private String test;
-	private String resultadoChasideFrecuente;
-	private String cantidadChasideResultado;
-	private String resultadoHollandFrecuente;
-	private String cantidadHollandResultado;
+	private double porcentaje;
+	private String perfilProfesional;
 	
 	public infoTest() {}
 
-	public infoTest(String test, String resultadoChasideFrecuente, String cantidadChasideResultado,
-			String resultadoHollandFrecuente, String cantidadHollandResultado) {
+	public infoTest(String test, double porcentaje, String perfilProfesional) {
 		this.test = test;
-		this.resultadoChasideFrecuente = resultadoChasideFrecuente;
-		this.cantidadChasideResultado = cantidadChasideResultado;
-		this.resultadoHollandFrecuente = resultadoHollandFrecuente;
-		this.cantidadHollandResultado = cantidadHollandResultado;
+		this.porcentaje = porcentaje;
+		this.perfilProfesional = perfilProfesional;
 	}
 
 	/**
@@ -33,58 +28,30 @@ public class infoTest {
 	}
 
 	/**
-	 * @return the resultadoChasideFrecuente
+	 * @return the porcentaje
 	 */
-	public String getResultadoChasideFrecuente() {
-		return resultadoChasideFrecuente;
+	public double getPorcentaje() {
+		return porcentaje;
 	}
 
 	/**
-	 * @param resultadoChasideFrecuente the resultadoChasideFrecuente to set
+	 * @param porcentaje the porcentaje to set
 	 */
-	public void setResultadoChasideFrecuente(String resultadoChasideFrecuente) {
-		this.resultadoChasideFrecuente = resultadoChasideFrecuente;
+	public void setPorcentaje(double porcentaje) {
+		this.porcentaje = porcentaje;
 	}
 
 	/**
-	 * @return the cantidadChasideResultado
+	 * @return the perfilProfesional
 	 */
-	public String getCantidadChasideResultado() {
-		return cantidadChasideResultado;
+	public String getPerfilProfesional() {
+		return perfilProfesional;
 	}
 
 	/**
-	 * @param cantidadChasideResultado the cantidadChasideResultado to set
+	 * @param perfilProfesional the perfilProfesional to set
 	 */
-	public void setCantidadChasideResultado(String cantidadChasideResultado) {
-		this.cantidadChasideResultado = cantidadChasideResultado;
-	}
-
-	/**
-	 * @return the resultadoHollandFrecuente
-	 */
-	public String getResultadoHollandFrecuente() {
-		return resultadoHollandFrecuente;
-	}
-
-	/**
-	 * @param resultadoHollandFrecuente the resultadoHollandFrecuente to set
-	 */
-	public void setResultadoHollandFrecuente(String resultadoHollandFrecuente) {
-		this.resultadoHollandFrecuente = resultadoHollandFrecuente;
-	}
-
-	/**
-	 * @return the cantidadHollandResultado
-	 */
-	public String getCantidadHollandResultado() {
-		return cantidadHollandResultado;
-	}
-
-	/**
-	 * @param cantidadHollandResultado the cantidadHollandResultado to set
-	 */
-	public void setCantidadHollandResultado(String cantidadHollandResultado) {
-		this.cantidadHollandResultado = cantidadHollandResultado;
+	public void setPerfilProfesional(String perfilProfesional) {
+		this.perfilProfesional = perfilProfesional;
 	}
 }
