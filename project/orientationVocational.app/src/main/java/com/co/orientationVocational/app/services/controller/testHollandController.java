@@ -71,6 +71,18 @@ public class testHollandController {
 			contador++;
 		}
 		
+		if(!mapDatos.containsKey("stDetalle1")) {
+			mapDatos.put("stDetalle1", "");
+		}
+		
+		if(!mapDatos.containsKey("stDetalle2")) {
+			mapDatos.put("stDetalle2", "");
+		}
+		
+		if(!mapDatos.containsKey("stDetalle3")) {
+			mapDatos.put("stDetalle3", "");
+		}
+		
 		mapDatos.put("stResultado", resultado);
 		mapDatos.put("stTipoTest", "Test Holland");
 		

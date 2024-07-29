@@ -8,12 +8,14 @@ public class jwtDto {
 	private String token;
     private String bearer = "Bearer";
     private String identificacion;
+    private String expirationToken;
     private Collection<? extends GrantedAuthority> authorities;
     
-	public jwtDto(String token, String identificacion, Collection<? extends GrantedAuthority> authorities) {
+	public jwtDto(String token, String identificacion, String expirationToken, Collection<? extends GrantedAuthority> authorities) {
 		super();
 		this.token = token;
 		this.identificacion = identificacion;
+		this.expirationToken = expirationToken;
 		this.authorities = authorities;
 	}
 
@@ -57,6 +59,20 @@ public class jwtDto {
 	 */
 	public void setIdentificacion(String identificacion) {
 		this.identificacion = identificacion;
+	}
+
+	/**
+	 * @return the expirationToken
+	 */
+	public String getExpirationToken() {
+		return expirationToken;
+	}
+
+	/**
+	 * @param expirationToken the expirationToken to set
+	 */
+	public void setExpirationToken(String expirationToken) {
+		this.expirationToken = expirationToken;
 	}
 
 	/**

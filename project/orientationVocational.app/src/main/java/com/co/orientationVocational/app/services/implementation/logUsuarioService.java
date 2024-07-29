@@ -24,13 +24,14 @@ import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.stereotype.Service;
 
+import com.co.orientationVocational.app.business.utils;
 import com.co.orientationVocational.app.business.informes.modelDataExcel;
 import com.co.orientationVocational.app.data.dataBase;
 import com.co.orientationVocational.app.security.entity.usuario;
 import com.co.orientationVocational.app.services.service.logUsuarioRepository;
 
 @Service
-public class logUsuarioService implements logUsuarioRepository, modelDataExcel{
+public class logUsuarioService extends utils implements logUsuarioRepository, modelDataExcel{
 	Connection connection;
 	
 	public logUsuarioService() throws SQLException {
@@ -283,5 +284,145 @@ public class logUsuarioService implements logUsuarioRepository, modelDataExcel{
 		} 
 		
 		return lista;
+	}
+
+	@Override
+	public int insertUbicacionUsuario(String datosUbicacion) {
+		StringBuilder sSql = new StringBuilder();
+		PreparedStatement pStm = null;
+		int rSet = 0;
+		
+		int registro = 0;
+		
+		String latitud = "";
+		String longitud = "";
+		String identificacion = "";
+		
+		if(!esVacio(datosUbicacion)) {
+			String[] arreglo = datosUbicacion.split(",");
+			
+			if(!esVacio(arreglo[0]))
+				identificacion = arreglo[0];
+			
+			if(!esVacio(arreglo[1]))
+				latitud = arreglo[1];
+			
+			if(!esVacio(arreglo[2]))
+				longitud = arreglo[2];
+		}
+		
+		try {
+			sSql.append(" INSERT INTO ubicacion_usuario (identificacion_usuario, latitud, longitud) ")
+			.append(" VALUES (?,?,?) ");
+			
+			pStm = connection.prepareStatement(sSql.toString());
+			
+			int i = 1;
+			
+			pStm.setObject(i++, identificacion.toString());
+			pStm.setObject(i++, latitud.toString());
+			pStm.setObject(i++, longitud.toString());
+			
+			rSet = pStm.executeUpdate();
+			
+			if(rSet != 0) {
+				registro = 1;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return registro;
+	}
+	
+	@Override
+	public int updateUbicacionUsuario(String datosUbicacion) {
+		StringBuilder sSql = new StringBuilder();
+		PreparedStatement pStm = null;
+		int rSet = 0;
+		
+		int registro = 0;
+		
+		String latitud = "";
+		String longitud = "";
+		String identificacion = "";
+		
+		if(!esVacio(datosUbicacion)) {
+			String[] arreglo = datosUbicacion.split(",");
+			
+			if(!esVacio(arreglo[0]))
+				identificacion = arreglo[0];
+			
+			if(!esVacio(arreglo[1]))
+				latitud = arreglo[1];
+			
+			if(!esVacio(arreglo[2]))
+				longitud = arreglo[2];
+		}
+		
+		try {
+			sSql.append(" UPDATE ubicacion_usuario SET latitud = ?, longitud = ? ")
+			.append(" WHERE identificacion_usuario = ? ");
+			
+			pStm = connection.prepareStatement(sSql.toString());
+			
+			int i = 1;
+
+			pStm.setObject(i++, latitud.toString());
+			pStm.setObject(i++, longitud.toString());
+			pStm.setObject(i++, identificacion.toString());
+			
+			rSet = pStm.executeUpdate();
+			
+			if(rSet != 0) {
+				registro = 1;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return registro;
+	}
+	
+	@Override
+	public String[] selectUbicacionUsuario(String identificacion) {
+		StringBuilder sSql = new StringBuilder();
+		PreparedStatement pStm = null;
+		ResultSet rSet = null;
+		
+		String[] registro = new String[2];
+		
+		String latitud = "";
+		String longitud = "";
+		
+		try {
+			sSql.append(" SELECT latitud, longitud FROM ubicacion_usuario ")
+			.append(" WHERE identificacion_usuario = ? ");
+			
+			pStm = connection.prepareStatement(sSql.toString());
+			
+			int i = 1;
+
+			pStm.setObject(i++, identificacion.toString());
+			
+			rSet = pStm.executeQuery();
+			
+			while(rSet.next()) {
+				latitud = rSet.getString("latitud");
+				longitud = rSet.getString("longitud");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		if(!esVacio(latitud)) {
+			registro[0] = latitud;
+		}
+		
+		if(!esVacio(longitud)) {
+			registro[1] = longitud;
+		}
+		
+		return registro;
 	}
 }

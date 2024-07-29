@@ -3,6 +3,7 @@ package com.co.orientationVocational.app.security.controller;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -11,6 +12,8 @@ import java.util.Set;
 
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +37,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.co.orientationVocational.app.business.Mensajes;
 import com.co.orientationVocational.app.business.utils;
+import com.co.orientationVocational.app.business.university.ApiUniversity;
 import com.co.orientationVocational.app.data.infoTest;
 import com.co.orientationVocational.app.security.dto.jwtDto;
 import com.co.orientationVocational.app.security.dto.loginUsuario;
@@ -44,6 +48,7 @@ import com.co.orientationVocational.app.security.enums.rolNombre;
 import com.co.orientationVocational.app.security.jwt.JwtProvider;
 import com.co.orientationVocational.app.security.service.rolService;
 import com.co.orientationVocational.app.security.service.usuarioService;
+import com.co.orientationVocational.app.services.controller.universidadesController;
 import com.co.orientationVocational.app.services.dto.usuarioDto;
 import com.co.orientationVocational.app.services.implementation.logUsuarioService;
 import com.co.orientationVocational.app.services.implementation.userServiceImplements;
@@ -52,6 +57,8 @@ import com.google.maps.errors.ApiException;
 @RestController
 @RequestMapping("/auth")
 public class authController extends utils {
+	private final static Logger logger = LoggerFactory.getLogger(authController.class);
+	
 	@Autowired
     PasswordEncoder passwordEncoder;
 
@@ -98,10 +105,18 @@ public class authController extends utils {
                         nuevoUsuario.getGenero());
         Set<rol> roles = new HashSet<>();
         roles.add(rolservice.getByNombre(rolNombre.ROLE_USER).get());
+        
         if(nuevoUsuario.getRoles().contains("admin"))
             roles.add(rolservice.getByNombre(rolNombre.ROLE_ADMIN).get());
+        
         usuarioNew.setRoles(roles);
         usuarioservice.save(usuarioNew);
+        
+        if(!esVacio(nuevoUsuario.getDireccion())) {
+        	int ingresoUbicacion = datosUbicacion(nuevoUsuario.getIdentificacion(), nuevoUsuario.getDireccion(), "insert");
+        	
+        	
+        }
         
         LocalDateTime fechaHoraActual = LocalDateTime.now();
         DateTimeFormatter formatoSQL = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -133,8 +148,9 @@ public class authController extends utils {
             Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginUsuario.getIdentificacion(), loginUsuario.getPassword()));
             SecurityContextHolder.getContext().setAuthentication(authentication);
             String jwt = jwtprovider.generateToken(authentication);
+            Date expiration = jwtprovider.getExpirationDateToken(jwt);
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            jwtDto jwtDto = new jwtDto(jwt, userDetails.getUsername(), userDetails.getAuthorities());
+            jwtDto jwtDto = new jwtDto(jwt, userDetails.getUsername(), expiration.toString(), userDetails.getAuthorities());
             return new ResponseEntity(jwtDto, HttpStatus.OK);
         } catch (BadCredentialsException e) {
         	return new ResponseEntity(new Mensajes("Contraseña Incorrecta"), HttpStatus.NOT_FOUND);
@@ -224,8 +240,13 @@ public class authController extends utils {
     	if(!esVacio(updateUsaurio.getDireccion()) && !updateUsaurio.getDireccion().equals(usuarioActualizado.getDireccion())) {
     		camposViejos = camposViejos + " " + "Direccion: " + usuarioActualizado.getDireccion().toString();
     		usuarioActualizado.setDireccion(updateUsaurio.getDireccion());
+    		int ingresoUbicacion = datosUbicacion(identificacion, updateUsaurio.getDireccion(), "update");
     		camposNuevos = camposNuevos + " " + "Direccion: " + updateUsaurio.getDireccion().toString();
     		confirmacion = true;
+    		
+    		if(ingresoUbicacion == 0) {
+    			logger.error("Error al hacer el cambio de coordenadas en la direccion");
+    		}
     	}
     	
     	if(!esVacio(updateUsaurio.getEmail()) && !updateUsaurio.getEmail().equals(usuarioActualizado.getEmail())) {
@@ -272,5 +293,35 @@ public class authController extends utils {
     	}
     	
     	return new ResponseEntity(new Mensajes("Usuario Actualizado"), HttpStatus.OK);
+    }
+    
+    private int datosUbicacion(String identificacion, String direccion, String operacion) {
+    	String datosRegistro = "";
+    	String busqueda = "";
+    	
+    	int response = 0;
+    	
+    	try {
+    		ApiUniversity api = new ApiUniversity();
+        	
+        	String ciudadUsuario = servicesImplements.ciudadValidation(identificacion);
+        	
+        	busqueda = identificacion + ";" + direccion + "," + ciudadUsuario;
+        	
+        	datosRegistro = api.informacionUbicación(busqueda);
+        	
+        	if(operacion.equalsIgnoreCase("insert")) {
+        		response = logUsuario.insertUbicacionUsuario(identificacion + "," + datosRegistro);
+        	}else if(operacion.equalsIgnoreCase("update")) {
+        		response = logUsuario.updateUbicacionUsuario(identificacion + "," + datosRegistro);
+        	}
+        	        	
+		} catch (Exception e) {			
+			logger.error("Error en en el registro de coordenadas longitud y/o latitud, Informacion: " + e);
+			
+			return 2;
+		}
+    	
+    	return response;
     }
 }

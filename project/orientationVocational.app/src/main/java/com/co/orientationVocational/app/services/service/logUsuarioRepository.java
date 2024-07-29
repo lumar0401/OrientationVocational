@@ -11,4 +11,7 @@ public interface logUsuarioRepository{
 	public int insertRegistre(Map<String, Object> newRegistro);
 	boolean existsByIdentificacion(String identificacion);
 	public List<usuario> listaUsuarios();
+	public int insertUbicacionUsuario(String datosUbicacion);
+	int updateUbicacionUsuario(String datosUbicacion);
+	String[] selectUbicacionUsuario(String datosUbicacion);
 }

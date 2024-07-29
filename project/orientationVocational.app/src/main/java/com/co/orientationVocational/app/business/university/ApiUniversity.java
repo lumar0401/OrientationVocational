@@ -22,6 +22,7 @@ import com.co.orientationVocational.app.business.task.webScraping;
 import com.co.orientationVocational.app.data.modelUniversityPage;
 import com.co.orientationVocational.app.data.responseCardUniversity;
 import com.co.orientationVocational.app.data.respuestaUniversidades;
+import com.co.orientationVocational.app.services.implementation.logUsuarioService;
 import com.co.orientationVocational.app.services.implementation.universityService;
 import com.google.maps.GeoApiContext;
 import com.google.maps.PlacesApi;
@@ -43,7 +44,7 @@ public class ApiUniversity extends utils {
 		List<String> searchResults = new LinkedList<String>();
 
 		try {
-			searchResults = buscarUniversidades("Universidades en " + ciudadUsuario);
+			searchResults = buscarUniversidades("Universidades en " + ciudadUsuario, identificacion);
 
 			if (!searchResults.isEmpty() && !esVacio(responseTest)) {
 				LinkedList<responseCardUniversity> responseCard = new LinkedList<responseCardUniversity>();
@@ -71,25 +72,57 @@ public class ApiUniversity extends utils {
 		return response;
 	}
 
-	private List<String> buscarUniversidades(String busqueda) {
+	private List<String> buscarUniversidades(String busqueda, String identificacion) {
 		List<String> searchResults = new LinkedList<>();
 
 		try {
-			TextSearchRequest request = PlacesApi.textSearchQuery(context, "universitaria").query(busqueda);
-			PlacesSearchResponse response = request.await();
+			logUsuarioService infoUsuario = new logUsuarioService();
+			
+			String[] coordenadas = infoUsuario.selectUbicacionUsuario(identificacion);
+			
+			if(!esVacio(coordenadas)) {
+				double latitud = Double.parseDouble(coordenadas[0]);
+				double longitud = Double.parseDouble(coordenadas[1]);
+				int radio = 30000;
+				
+				TextSearchRequest request = PlacesApi.textSearchQuery(context, "universitaria")
+						.query(busqueda)
+						.location(new com.google.maps.model.LatLng(latitud, longitud))
+						.radius(radio);
+				
+				PlacesSearchResponse response = request.await();
 
-			for (PlacesSearchResult result : response.results) {
-				String[] temp = result.name.toString().split(" ");
+				for (PlacesSearchResult result : response.results) {
+					String[] temp = result.name.toString().split(" ");
 
-				if ((temp.length > 1) && (result.name.toString().toLowerCase().contains("universidad")
-						|| result.toString().toLowerCase().contains("university")
-						|| result.toString().toLowerCase().contains("universitaria")
-						|| result.toString().toLowerCase().contains("institución")
-						|| result.toString().toLowerCase().contains("institucion")
-						|| result.toString().toLowerCase().contains("instituto"))) {
-					searchResults.add(result.name);
+					if ((temp.length > 1) && (result.name.toString().toLowerCase().contains("universidad")
+							|| result.toString().toLowerCase().contains("university")
+							|| result.toString().toLowerCase().contains("universitaria")
+							|| result.toString().toLowerCase().contains("institución")
+							|| result.toString().toLowerCase().contains("institucion")
+							|| result.toString().toLowerCase().contains("instituto"))) {
+						searchResults.add(result.name);
+					}
+				}
+			}else {
+				TextSearchRequest request = PlacesApi.textSearchQuery(context, "universitaria").query(busqueda);
+				PlacesSearchResponse response = request.await();
+
+				for (PlacesSearchResult result : response.results) {
+					String[] temp = result.name.toString().split(" ");
+
+					if ((temp.length > 1) && (result.name.toString().toLowerCase().contains("universidad")
+							|| result.toString().toLowerCase().contains("university")
+							|| result.toString().toLowerCase().contains("universitaria")
+							|| result.toString().toLowerCase().contains("institución")
+							|| result.toString().toLowerCase().contains("institucion")
+							|| result.toString().toLowerCase().contains("instituto"))) {
+						searchResults.add(result.name);
+					}
 				}
 			}
+			
+			
 		} catch (Exception e) {
 			logger.error("Error al buscar universidades: " + e);
 		}
@@ -422,5 +455,28 @@ public class ApiUniversity extends utils {
 		}
 
 		return response;
+	}
+	
+	public String informacionUbicación(String busqueda) {
+		double latitud = 0.0;
+		double longitud = 0.0;
+		
+		String searchResults = "";
+
+		try {
+			TextSearchRequest request = PlacesApi.textSearchQuery(context, "ubicacion").query(busqueda);
+			PlacesSearchResponse response = request.await();
+
+			for (PlacesSearchResult result : response.results) {				
+				latitud = result.geometry.location.lat;
+				longitud = result.geometry.location.lng;
+			}
+		} catch (Exception e) {
+			logger.error("Error al buscar universidades: " + e);
+		}
+		
+		searchResults = latitud + "," + longitud;
+
+		return searchResults;
 	}
 }
