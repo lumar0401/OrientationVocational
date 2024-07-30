@@ -169,7 +169,7 @@ public class authController extends utils {
     	return new ResponseEntity(usuarioEncontrado, HttpStatus.OK);
     }
     
-    @GetMapping("/obtain-test/")
+    @PostMapping("/obtain-test/")
     public ResponseEntity<infoTest> getByTestUsuario(@RequestBody infoTestDto informacion) throws ApiException, InterruptedException, IOException{
     	if(!usuarioservice.existsByIdentificacion(informacion.getIdentificacion()))
 			return new ResponseEntity(new Mensajes("Usuario no existe"), HttpStatus.NOT_FOUND);
