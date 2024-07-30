@@ -1,57 +1,41 @@
 package com.co.orientationVocational.app.data;
 
 public class infoTest {
-	private String test;
-	private double porcentaje;
-	private String perfilProfesional;
+	private String name;
+	private double value;
 	
 	public infoTest() {}
 
-	public infoTest(String test, double porcentaje, String perfilProfesional) {
-		this.test = test;
-		this.porcentaje = porcentaje;
-		this.perfilProfesional = perfilProfesional;
+	public infoTest(String name, double value) {
+		this.name = name;
+		this.value = value;
 	}
 
 	/**
-	 * @return the test
+	 * @return the name
 	 */
-	public String getTest() {
-		return test;
+	public String getName() {
+		return name;
 	}
 
 	/**
-	 * @param test the test to set
+	 * @param name the name to set
 	 */
-	public void setTest(String test) {
-		this.test = test;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	/**
-	 * @return the porcentaje
+	 * @return the value
 	 */
-	public double getPorcentaje() {
-		return porcentaje;
+	public double getValue() {
+		return value;
 	}
 
 	/**
-	 * @param porcentaje the porcentaje to set
+	 * @param value the value to set
 	 */
-	public void setPorcentaje(double porcentaje) {
-		this.porcentaje = porcentaje;
-	}
-
-	/**
-	 * @return the perfilProfesional
-	 */
-	public String getPerfilProfesional() {
-		return perfilProfesional;
-	}
-
-	/**
-	 * @param perfilProfesional the perfilProfesional to set
-	 */
-	public void setPerfilProfesional(String perfilProfesional) {
-		this.perfilProfesional = perfilProfesional;
+	public void setValue(double value) {
+		this.value = value;
 	}
 }

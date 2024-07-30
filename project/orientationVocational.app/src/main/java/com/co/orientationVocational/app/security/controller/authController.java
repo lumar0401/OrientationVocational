@@ -50,6 +50,7 @@ import com.co.orientationVocational.app.security.jwt.JwtProvider;
 import com.co.orientationVocational.app.security.service.rolService;
 import com.co.orientationVocational.app.security.service.usuarioService;
 import com.co.orientationVocational.app.services.controller.universidadesController;
+import com.co.orientationVocational.app.services.dto.infoTestDto;
 import com.co.orientationVocational.app.services.dto.usuarioDto;
 import com.co.orientationVocational.app.services.implementation.logUsuarioService;
 import com.co.orientationVocational.app.services.implementation.userServiceImplements;
@@ -168,12 +169,12 @@ public class authController extends utils {
     	return new ResponseEntity(usuarioEncontrado, HttpStatus.OK);
     }
     
-    @GetMapping("/obtain-test/{id}")
-    public ResponseEntity<infoTest> getByTestUsuario(@PathVariable("id") String identificacion) throws ApiException, InterruptedException, IOException{
-    	if(!usuarioservice.existsByIdentificacion(identificacion))
+    @GetMapping("/obtain-test/")
+    public ResponseEntity<infoTest> getByTestUsuario(@RequestBody infoTestDto informacion) throws ApiException, InterruptedException, IOException{
+    	if(!usuarioservice.existsByIdentificacion(informacion.getIdentificacion()))
 			return new ResponseEntity(new Mensajes("Usuario no existe"), HttpStatus.NOT_FOUND);
     	
-    	List<infoTest> testUsuarioEncontrados = datosPorcentajeTest(identificacion);
+    	List<infoTest> testUsuarioEncontrados = datosPorcentajeTest(informacion.getIdentificacion(), informacion.getTest());
     	
     	return new ResponseEntity(testUsuarioEncontrados, HttpStatus.OK);
     }
@@ -333,17 +334,19 @@ public class authController extends utils {
     	return response;
     }
     
-    private List<infoTest> datosPorcentajeTest(String identificacion) {
+    private List<infoTest> datosPorcentajeTest(String identificacion, String test) {
     	List<infoTest> response = new LinkedList<infoTest>();
     	
     	try {
-    		List<String> testChaside = servicesImplements.findByTest(identificacion.toString(), "chaside");
-    		List<String> testHolland = servicesImplements.findByTest(identificacion.toString(), "holland");
-    				   		
-    		int cantidadChaside = obtenerCantidadTotal(testChaside);
-    		int cantidadHolland = obtenerCantidadTotal(testHolland);
+    		List<String> resulTest = new LinkedList<String>();
     		
-    		response = organizarRespuesta(cantidadChaside, cantidadHolland, testChaside, testHolland);         	
+    		if(test.equalsIgnoreCase("chaside")) {
+    			resulTest = servicesImplements.findByTest(identificacion.toString(), "chaside");
+    		}else if(test.equalsIgnoreCase("holland")) {
+    			resulTest = servicesImplements.findByTest(identificacion.toString(), "holland");
+    		}
+    		
+    		response = organizarRespuesta(resulTest, test);         	
 		} catch (Exception e) {			
 			logger.error("Error obteniendo datos test, Informacion: " + e);
 		}
@@ -351,106 +354,25 @@ public class authController extends utils {
     	return response;
     }
     
-    private int obtenerCantidadTotal(List<String> testList) {
-        int cantidadTotal = 0;
-        
-        for (String test : testList) {
-            String[] temp = test.split(",");
-            cantidadTotal += Integer.parseInt(temp[1]);
-        }
-
-        return cantidadTotal;
-    }
-    
-    private List<infoTest> organizarRespuesta(int cantidadChaside, int cantidadHolland, List<String> testChaside, List<String> testHolland){
+    private List<infoTest> organizarRespuesta(List<String> resulTest, String test){
     	List<infoTest> response = new LinkedList<infoTest>();
-    	
-    	double porcentajeChaside1 = 0.0;
-    	double porcentajeChaside2 = 0.0;
-    	
-    	int contador = 0;
-    	
-    	for (String string : testChaside) {
+    	    	
+    	for (String string : resulTest) {
 			String[] temp = string.split(",");
 			
-			if(contador == 0) {
-				porcentajeChaside1 = (Integer.valueOf(temp[1]) * 100.0) / cantidadChaside;
-				
-				infoTest info  = new infoTest();
-				
-				info.setTest("Chaside");
-				info.setPorcentaje(porcentajeChaside1);
-				
-				String[] aux = temp[0].split("-");
-				
-				info.setPerfilProfesional(equivalencia(aux[0],"Chaside"));
-				
-				response.add(info);
-			}else {
-				porcentajeChaside2 = (Integer.valueOf(temp[1]) * 100.0) / cantidadChaside;
-				
-				infoTest info  = new infoTest();
-				
-				info.setTest("Chaside");
-				info.setPorcentaje(porcentajeChaside2);
-				
-				String[] aux = temp[0].split("-");
-				
-				info.setPerfilProfesional(equivalencia(aux[0],"Chaside"));
-				
-				response.add(info);
-			}
-		}
-    	
-    	contador = 0;
-    	
-    	double porcentajeHalland1 = 0.0;
-    	double porcentajeHalland2 = 0.0;
-    	double porcentajeHalland3 = 0.0;
-    	
-    	for (String string : testHolland) {
-			String[] temp = string.split(",");
+			infoTest info  = new infoTest();
 			
-			if(contador == 0) {
-				porcentajeHalland1 = (Integer.valueOf(temp[1]) * 100.0) / cantidadHolland;
-				
-				infoTest info  = new infoTest();
-				
-				info.setTest("Holland");
-				info.setPorcentaje(porcentajeHalland1);
-				
-				String[] aux = temp[0].split("-");
-				
-				info.setPerfilProfesional(aux[0]);
-				
-				response.add(info);
-			}else if(contador == 1) {
-				porcentajeHalland2 = (Integer.valueOf(temp[1]) * 100.0) / cantidadHolland;
-				
-				infoTest info  = new infoTest();
-				
-				info.setTest("Holland");
-				info.setPorcentaje(porcentajeHalland2);
-				
-				String[] aux = temp[0].split("-");
-				
-				info.setPerfilProfesional(aux[0]);
-				
-				response.add(info);
+			String[] aux = temp[0].split("-");
+			
+			info.setValue(Double.valueOf(temp[1]));
+			
+			if(test.equalsIgnoreCase("caside")) {
+				info.setName(equivalencia(aux[0],"Chaside"));
 			}else {
-				porcentajeHalland3 = (Integer.valueOf(temp[1]) * 100.0) / cantidadHolland;
-				
-				infoTest info  = new infoTest();
-				
-				info.setTest("Holland");
-				info.setPorcentaje(porcentajeHalland3);
-				
-				String[] aux = temp[0].split("-");
-				
-				info.setPerfilProfesional(aux[0]);
-				
-				response.add(info);
+				info.setName(aux[0]);
 			}
+			
+			response.add(info);
 		}
     	
     	return response;
