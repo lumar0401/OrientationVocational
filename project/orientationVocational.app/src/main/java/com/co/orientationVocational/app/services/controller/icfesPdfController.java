@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,6 +28,7 @@ import com.co.orientationVocational.app.business.files.icfesPdf;
 import com.co.orientationVocational.app.data.icfesUsuario;
 import com.co.orientationVocational.app.security.service.usuarioService;
 import com.co.orientationVocational.app.services.dto.icfesDto;
+import com.co.orientationVocational.app.services.dto.usuarioIcfesDto;
 import com.co.orientationVocational.app.services.implementation.fileService;
 import com.co.orientationVocational.app.services.service.usuarioIcfesRepository;
 
@@ -110,13 +112,13 @@ public class icfesPdfController extends utils {
 		}
 	}
 	
-	@PostMapping("/icfes-usuarios/{id}")
-	public ResponseEntity<List<icfesDto>> icfesUsuarios(@PathVariable("id") String identificacion){
-		if(!usuarioservice.existsByIdentificacion(identificacion))
+	@PostMapping("/icfes-usuarios/")
+	public ResponseEntity<List<icfesDto>> icfesUsuarios(@RequestBody usuarioIcfesDto usuario){
+		if(!usuarioservice.existsByIdentificacion(usuario.getIdentificacion()))
 			return new ResponseEntity(new Mensajes("Usuario no existe"), HttpStatus.NOT_FOUND);
 		
 		try {
-			List<icfesDto> icfes = usuarioicfes.icfesxUsuario(identificacion);
+			List<icfesDto> icfes = usuarioicfes.icfesxUsuario(usuario.getIdentificacion());
 			
 			return new ResponseEntity(icfes, HttpStatus.OK);
 		} catch (Exception e) {
