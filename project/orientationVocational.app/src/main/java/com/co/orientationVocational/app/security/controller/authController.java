@@ -366,7 +366,7 @@ public class authController extends utils {
 			
 			info.setValue(Double.valueOf(temp[1]));
 			
-			if(test.equalsIgnoreCase("caside")) {
+			if(test.equalsIgnoreCase("chaside")) {
 				info.setName(equivalencia(aux[0],"Chaside"));
 			}else {
 				info.setName(aux[0]);
