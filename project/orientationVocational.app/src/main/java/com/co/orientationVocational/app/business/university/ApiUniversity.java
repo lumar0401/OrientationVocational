@@ -141,6 +141,7 @@ public class ApiUniversity extends utils {
 		String fechaFormateada = fechaActual.format(formato);
 
 		LinkedList<responseCardUniversity> responseCard = new LinkedList<responseCardUniversity>();
+		LinkedList<responseCardUniversity> responseCardTemp = new LinkedList<responseCardUniversity>();
 
 		mapUniversity.put("stCategorias", responseTest);
 		mapUniversity.put("stUniversidades", universidades);
@@ -157,20 +158,20 @@ public class ApiUniversity extends utils {
 		
 		if (!esVacio(responseTest) && !esVacio(universidades) && !pDatos.isEmpty()) {			
 			organizarMapaUniversidades(pDatos);
-			
+						
 			for (Map.Entry<String, modelUniversityPage> entry : pDatos.entrySet()) {
-				
 				boolean metodoBusqueda = compararFechas(fechaFormateada, entry.getValue().getFechaRegistro());
 				
 				if(metodoBusqueda) {
 					responseCard = armarRespuestaDataBase(responseTest, universidades, entry.getValue());
+					responseCardTemp.addAll(armarRespuestaDataBase(responseTest, universidades, entry.getValue()));
 				}else {
 					armarRespuestaWebscraping(responseTest, universidades, intereses, searchOne, mapUniversity, entry.getValue(), responseCard);
 				}
 			}			
 		}
 		
-		return responseCard;
+		return responseCardTemp;
 	}
 
 	private Map<String, modelUniversityPage> consultaUrlUniversidad(List<String> listaUniversidades, String intereses, String test) {
@@ -205,7 +206,11 @@ public class ApiUniversity extends utils {
 
 						continue;
 					} else {
-						String frase = StringUtils.stripAccents(string);
+						String frase = string;
+						
+						if(!string.toLowerCase().contains("ñ")) {
+							frase = StringUtils.stripAccents(string);
+						}
 
 						if (frase.toLowerCase().contains("universidad") || frase.toLowerCase().contains("university")
 								|| frase.toLowerCase().contains("universitaria")
@@ -318,7 +323,10 @@ public class ApiUniversity extends utils {
 							.filter(palabra -> !palabra.equals("university"))
 							.filter(palabra -> !palabra.equals("universitaria"))
 							.filter(palabra -> !palabra.equals("institucion"))
-							.filter(palabra -> !palabra.equals("instituto")).filter(palabra -> palabra.length() > 3)
+							.filter(palabra -> !palabra.equals("instituto"))
+							.filter(palabra -> !palabra.equals("seccional"))
+							.filter(palabra -> !palabra.equals("foundation"))
+							.filter(palabra -> palabra.length() > 4)
 							.collect(Collectors.toList());
 					String fraseFinal = String.join(" ", palabrasFiltradas);
 					resultado = fraseFinal;

@@ -135,15 +135,13 @@ public class universityService extends utils implements universityRepository {
 		try {
 			sSql.append(" SELECT titulo, semestres, valor_semestre, modalidad, director_programa ")
 			.append(" FROM informacion_universidades ")
-			.append(" WHERE id_universidad = ? ")
-			.append(" AND programa = ? ");
+			.append(" WHERE id_universidad = ? ");
 												
 			pStm = connection.prepareStatement(sSql.toString());
 			
 			int i = 1;
 						
 			pStm.setObject(i++, idUniversidad.toString());
-			pStm.setObject(i++, programa.toString());
 						
 			rSet = pStm.executeQuery();
 			
