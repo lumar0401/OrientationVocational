@@ -141,13 +141,13 @@ public class usuarioIcfesService implements usuarioIcfesRepository {
 				
 				icfes.setIdentificacion(rSet.getString("identificacion_usuario").toString());
 				icfes.setRegistro(rSet.getString("registro_icfes").toString());
-				icfes.setPuntajeCiencias(rSet.getString("ciencias_puntaje").toString());
-				icfes.setPuntajeCompetencias(rSet.getString("competencias_puntaje").toString());
-				icfes.setPuntajeIngles(rSet.getString("ingles_puntaje").toString());
-				icfes.setPuntajeLectura(rSet.getString("lectura_puntaje").toString());
-				icfes.setPuntajeMatematicas(rSet.getString("matematicas_puntaje").toString());
-				icfes.setPuntajeRazonamiento(rSet.getString("razonamiento_puntaje").toString());
-				icfes.setPuntajeSociales(rSet.getString("sociales_puntaje").toString());
+				icfes.setCiencias_naturales(rSet.getString("ciencias_puntaje").toString());
+				icfes.setCompetencias(rSet.getString("competencias_puntaje").toString());
+				icfes.setIngles(rSet.getString("ingles_puntaje").toString());
+				icfes.setLectura_critica(rSet.getString("lectura_puntaje").toString());
+				icfes.setMatematicas(rSet.getString("matematicas_puntaje").toString());
+				icfes.setRazonamiento(rSet.getString("razonamiento_puntaje").toString());
+				icfes.setSociales(rSet.getString("sociales_puntaje").toString());
 				
 				response.add(icfes);
 			}

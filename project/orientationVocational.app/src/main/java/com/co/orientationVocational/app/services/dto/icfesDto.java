@@ -3,28 +3,27 @@ package com.co.orientationVocational.app.services.dto;
 public class icfesDto {
 	private String identificacion;
 	private String registro;
-	private String puntajeCiencias;
-	private String puntajeCompetencias;
-	private String puntajeIngles;
-	private String puntajeLectura;
-	private String puntajeMatematicas;
-	private String puntajeRazonamiento;
-	private String puntajeSociales;
+	private String lectura_critica;
+	private String matematicas;
+	private String sociales;
+	private String ciencias_naturales;
+	private String ingles;
+	private String razonamiento;
+	private String competencias;
 	
 	public icfesDto() {}
 
-	public icfesDto(String identificacion, String registro, String puntajeCiencias, String puntajeCompetencias,
-			String puntajeIngles, String puntajeLectura, String puntajeMatematicas, String puntajeRazonamiento,
-			String puntajeSociales) {
+	public icfesDto(String identificacion, String registro, String lectura_critica, String matematicas, String sociales,
+			String ciencias_naturales, String ingles, String razonamiento, String competencias) {
 		this.identificacion = identificacion;
 		this.registro = registro;
-		this.puntajeCiencias = puntajeCiencias;
-		this.puntajeCompetencias = puntajeCompetencias;
-		this.puntajeIngles = puntajeIngles;
-		this.puntajeLectura = puntajeLectura;
-		this.puntajeMatematicas = puntajeMatematicas;
-		this.puntajeRazonamiento = puntajeRazonamiento;
-		this.puntajeSociales = puntajeSociales;
+		this.lectura_critica = lectura_critica;
+		this.matematicas = matematicas;
+		this.sociales = sociales;
+		this.ciencias_naturales = ciencias_naturales;
+		this.ingles = ingles;
+		this.razonamiento = razonamiento;
+		this.competencias = competencias;
 	}
 
 	/**
@@ -56,100 +55,100 @@ public class icfesDto {
 	}
 
 	/**
-	 * @return the puntajeCiencias
+	 * @return the lectura_critica
 	 */
-	public String getPuntajeCiencias() {
-		return puntajeCiencias;
+	public String getLectura_critica() {
+		return lectura_critica;
 	}
 
 	/**
-	 * @param puntajeCiencias the puntajeCiencias to set
+	 * @param lectura_critica the lectura_critica to set
 	 */
-	public void setPuntajeCiencias(String puntajeCiencias) {
-		this.puntajeCiencias = puntajeCiencias;
+	public void setLectura_critica(String lectura_critica) {
+		this.lectura_critica = lectura_critica;
 	}
 
 	/**
-	 * @return the puntajeCompetencias
+	 * @return the matematicas
 	 */
-	public String getPuntajeCompetencias() {
-		return puntajeCompetencias;
+	public String getMatematicas() {
+		return matematicas;
 	}
 
 	/**
-	 * @param puntajeCompetencias the puntajeCompetencias to set
+	 * @param matematicas the matematicas to set
 	 */
-	public void setPuntajeCompetencias(String puntajeCompetencias) {
-		this.puntajeCompetencias = puntajeCompetencias;
+	public void setMatematicas(String matematicas) {
+		this.matematicas = matematicas;
 	}
 
 	/**
-	 * @return the puntajeIngles
+	 * @return the sociales
 	 */
-	public String getPuntajeIngles() {
-		return puntajeIngles;
+	public String getSociales() {
+		return sociales;
 	}
 
 	/**
-	 * @param puntajeIngles the puntajeIngles to set
+	 * @param sociales the sociales to set
 	 */
-	public void setPuntajeIngles(String puntajeIngles) {
-		this.puntajeIngles = puntajeIngles;
+	public void setSociales(String sociales) {
+		this.sociales = sociales;
 	}
 
 	/**
-	 * @return the puntajeLectura
+	 * @return the ciencias_naturales
 	 */
-	public String getPuntajeLectura() {
-		return puntajeLectura;
+	public String getCiencias_naturales() {
+		return ciencias_naturales;
 	}
 
 	/**
-	 * @param puntajeLectura the puntajeLectura to set
+	 * @param ciencias_naturales the ciencias_naturales to set
 	 */
-	public void setPuntajeLectura(String puntajeLectura) {
-		this.puntajeLectura = puntajeLectura;
+	public void setCiencias_naturales(String ciencias_naturales) {
+		this.ciencias_naturales = ciencias_naturales;
 	}
 
 	/**
-	 * @return the puntajeMatematicas
+	 * @return the ingles
 	 */
-	public String getPuntajeMatematicas() {
-		return puntajeMatematicas;
+	public String getIngles() {
+		return ingles;
 	}
 
 	/**
-	 * @param puntajeMatematicas the puntajeMatematicas to set
+	 * @param ingles the ingles to set
 	 */
-	public void setPuntajeMatematicas(String puntajeMatematicas) {
-		this.puntajeMatematicas = puntajeMatematicas;
+	public void setIngles(String ingles) {
+		this.ingles = ingles;
 	}
 
 	/**
-	 * @return the puntajeRazonamiento
+	 * @return the razonamiento
 	 */
-	public String getPuntajeRazonamiento() {
-		return puntajeRazonamiento;
+	public String getRazonamiento() {
+		return razonamiento;
 	}
 
 	/**
-	 * @param puntajeRazonamiento the puntajeRazonamiento to set
+	 * @param razonamiento the razonamiento to set
 	 */
-	public void setPuntajeRazonamiento(String puntajeRazonamiento) {
-		this.puntajeRazonamiento = puntajeRazonamiento;
+	public void setRazonamiento(String razonamiento) {
+		this.razonamiento = razonamiento;
 	}
 
 	/**
-	 * @return the puntajeSociales
+	 * @return the competencias
 	 */
-	public String getPuntajeSociales() {
-		return puntajeSociales;
+	public String getCompetencias() {
+		return competencias;
 	}
 
 	/**
-	 * @param puntajeSociales the puntajeSociales to set
+	 * @param competencias the competencias to set
 	 */
-	public void setPuntajeSociales(String puntajeSociales) {
-		this.puntajeSociales = puntajeSociales;
+	public void setCompetencias(String competencias) {
+		this.competencias = competencias;
 	}
 }
