@@ -4,11 +4,14 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 
 import com.co.orientationVocational.app.data.dataBase;
 import com.co.orientationVocational.app.data.icfesUsuario;
+import com.co.orientationVocational.app.services.dto.icfesDto;
 import com.co.orientationVocational.app.services.service.usuarioIcfesRepository;
 
 @Service
@@ -110,5 +113,49 @@ public class usuarioIcfesService implements usuarioIcfesRepository {
 		} 
 		
 		return ingreso;
+	}	
+	
+	@Override
+	public List<icfesDto> icfesxUsuario(String identificacion) {
+		StringBuilder sSql = new StringBuilder();
+		PreparedStatement pStm = null;
+		ResultSet rSet = null;
+		
+		List<icfesDto> response = new LinkedList<icfesDto>();
+		
+		try {
+			sSql.append(" SELECT * ")
+			.append(" FROM usuario_icfes ")
+			.append(" WHERE identificacion_usuario = ? ");
+			
+			pStm = connection.prepareStatement(sSql.toString());
+			
+			int i = 1;
+			
+			pStm.setObject(i++, identificacion.toString()); 
+			
+			rSet = pStm.executeQuery();
+			
+			while(rSet.next()) {
+				icfesDto icfes = new icfesDto();
+				
+				icfes.setIdentificacion(rSet.getString("identificacion_usuario").toString());
+				icfes.setRegistro(rSet.getString("registro_icfes").toString());
+				icfes.setPuntajeCiencias(rSet.getString("ciencias_puntaje").toString());
+				icfes.setPuntajeCompetencias(rSet.getString("competencias_puntaje").toString());
+				icfes.setPuntajeIngles(rSet.getString("ingles_puntaje").toString());
+				icfes.setPuntajeLectura(rSet.getString("lectura_puntaje").toString());
+				icfes.setPuntajeMatematicas(rSet.getString("matematicas_puntaje").toString());
+				icfes.setPuntajeRazonamiento(rSet.getString("razonamiento_puntaje").toString());
+				icfes.setPuntajeSociales(rSet.getString("sociales_puntaje").toString());
+				
+				response.add(icfes);
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} 
+		
+		return response;
 	}	
 }

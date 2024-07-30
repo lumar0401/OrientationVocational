@@ -319,7 +319,7 @@ public class testChaside extends utils {
 					+ " tiempo necesario.";
 		}else if(valorMasFrecuente > -0.99 && valorMasFrecuente < -0.01) {
 			resultadoAnalisis = "De acuerdo al analisis y entre los diferentes test realizados, se encuentra una relación limitada entre los"
-					+ " conocimientos del usuario y las actitudes e intereses, al tenes un relacion baja es recomendable revisar documentacion"
+					+ " conocimientos del usuario y las actitudes e intereses, al tener un relacion baja es recomendable revisar documentacion"
 					+ " de las diferentes carreras, una vez encontrado nueva información es recomendable realizar nuevament el test";
 		}else if(valorMasFrecuente > 0.0 && valorMasFrecuente < 0.99) {
 			resultadoAnalisis = "Tras un análisis y la realización de diversos tests, se ha identificado una relación significativa entre el "

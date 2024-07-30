@@ -37,8 +37,10 @@ public class testHollandController {
 		
 		LinkedList<testModelResponse>  responseTest = holland.resultTest(hollandQuestion.getTestQuestion(), hollandQuestion.getIdentificacion());
 		
-		insertarRegistroTest(hollandQuestion.getIdentificacion(), responseTest, hollandQuestion.getTestQuestion());
-    	
+		if(!responseTest.isEmpty()) {
+			insertarRegistroTest(hollandQuestion.getIdentificacion(), responseTest, hollandQuestion.getTestQuestion());
+		}
+		
 		return new ResponseEntity(responseTest, HttpStatus.OK);
 	}
 	

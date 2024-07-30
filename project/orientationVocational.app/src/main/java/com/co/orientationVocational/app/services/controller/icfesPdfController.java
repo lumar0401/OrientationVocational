@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,9 +21,12 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.co.orientationVocational.app.business.FileMessages;
+import com.co.orientationVocational.app.business.Mensajes;
 import com.co.orientationVocational.app.business.utils;
 import com.co.orientationVocational.app.business.files.icfesPdf;
 import com.co.orientationVocational.app.data.icfesUsuario;
+import com.co.orientationVocational.app.security.service.usuarioService;
+import com.co.orientationVocational.app.services.dto.icfesDto;
 import com.co.orientationVocational.app.services.implementation.fileService;
 import com.co.orientationVocational.app.services.service.usuarioIcfesRepository;
 
@@ -36,6 +40,9 @@ public class icfesPdfController extends utils {
 	
 	@Autowired
 	fileService fileservice;
+	
+	@Autowired
+    usuarioService usuarioservice;
 	
 	@PostMapping("/upload-pdf")
 	public ResponseEntity<icfesUsuario> uploadPdf(@RequestParam("file") MultipartFile file, @RequestParam("identificacion") String identificacion) {
@@ -100,6 +107,20 @@ public class icfesPdfController extends utils {
 			return ResponseEntity.status(HttpStatus.OK).body(new FileMessages(message));
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new FileMessages(message));
+		}
+	}
+	
+	@PostMapping("/icfes-usuarios/{id}")
+	public ResponseEntity<List<icfesDto>> icfesUsuarios(@PathVariable("id") String identificacion){
+		if(!usuarioservice.existsByIdentificacion(identificacion))
+			return new ResponseEntity(new Mensajes("Usuario no existe"), HttpStatus.NOT_FOUND);
+		
+		try {
+			List<icfesDto> icfes = usuarioicfes.icfesxUsuario(identificacion);
+			
+			return new ResponseEntity(icfes, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity(new Mensajes("Contraseña Incorrecta"), HttpStatus.NOT_FOUND);
 		}
 	}
 }
