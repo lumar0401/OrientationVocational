@@ -1,5 +1,9 @@
 package com.co.orientationVocational.app.security.jwt;
 
+
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 import org.slf4j.Logger;
@@ -68,4 +72,10 @@ public class JwtProvider {
 	            .getBody()
 	            .getExpiration();
 	}
+
+	public String getExpirationDateTokenISO(String token) {
+		Date expirationDate = getExpirationDateToken(token);
+    	ZonedDateTime expirationZonedDateTime = expirationDate.toInstant().atZone(ZoneId.of("America/Bogota"));
+    	return DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(expirationZonedDateTime);
+    }
 }

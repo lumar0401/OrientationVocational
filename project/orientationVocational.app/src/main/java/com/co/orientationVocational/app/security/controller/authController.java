@@ -151,8 +151,9 @@ public class authController extends utils {
             SecurityContextHolder.getContext().setAuthentication(authentication);
             String jwt = jwtprovider.generateToken(authentication);
             Date expiration = jwtprovider.getExpirationDateToken(jwt);
+			String expirationISO = jwtprovider.getExpirationDateTokenISO(jwt);
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            jwtDto jwtDto = new jwtDto(jwt, userDetails.getUsername(), expiration.toString(), userDetails.getAuthorities());
+            jwtDto jwtDto = new jwtDto(jwt, userDetails.getUsername(), expiration.toString(), expirationISO, userDetails.getAuthorities());
             return new ResponseEntity(jwtDto, HttpStatus.OK);
         } catch (BadCredentialsException e) {
         	return new ResponseEntity(new Mensajes("Contraseña Incorrecta"), HttpStatus.NOT_FOUND);
@@ -394,7 +395,7 @@ public class authController extends utils {
 			case "D":
 				return "Area de Defensa y Seguridad";
 			case "E":
-				return "Area de Ciencias Ecperimentales";
+				return "Area de Ciencias Experimentales";
 			default:
 				return "";
 			}
