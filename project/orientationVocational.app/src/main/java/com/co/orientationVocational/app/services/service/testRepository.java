@@ -11,5 +11,5 @@ import com.co.orientationVocational.app.data.testModelResponse;
 public interface testRepository {
 	public int inserRegistre(Map<String, Object> testNew);
 	public LinkedList<testModelResponse> consultarUltimoRegistro(String fecha);
-	public LinkedList<String> testPreviosUsuario(String identificacion);
+	public LinkedList<String> testPreviosUsuario(String identificacion, String test);
 }

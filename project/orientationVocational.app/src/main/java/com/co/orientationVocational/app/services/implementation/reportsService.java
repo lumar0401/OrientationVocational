@@ -23,12 +23,16 @@ import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.stereotype.Service;
 
+import com.co.orientationVocational.app.business.files.resultUserPdf;
 import com.co.orientationVocational.app.business.informes.modelDataExcel;
 import com.co.orientationVocational.app.data.dataBase;
 import com.co.orientationVocational.app.services.models.logUsuario;
 import com.co.orientationVocational.app.services.models.pregunta;
 import com.co.orientationVocational.app.services.models.universidades;
 import com.co.orientationVocational.app.services.service.reportsRepository;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.pdf.PdfWriter;
 
 @Service
 public class reportsService implements reportsRepository, modelDataExcel{
@@ -490,4 +494,30 @@ public class reportsService implements reportsRepository, modelDataExcel{
 		
 		return lista;
 	}
+	
+	@Override
+	public ByteArrayInputStream exportAllDataPDF(String identificacion) throws Exception {		
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+	    resultUserPdf result = new resultUserPdf();
+	    Document document = new Document();
+	    
+	    try {
+	    	PdfWriter writer = PdfWriter.getInstance(document, stream);
+	        document.open();
+	        document.setMargins(50, 50, 50, 50);
+	        	       
+	        
+	        //result.pintarBordesPDF(document, writer);
+	        result.crearDiagramaCircular(document, writer, identificacion);
+
+	    } catch (DocumentException e) {
+	        e.printStackTrace();
+	        throw new Exception("Error al generar el PDF: " + e.getMessage());
+	    } finally {
+	        document.close();
+	    }
+
+	    return new ByteArrayInputStream(stream.toByteArray());
+	}
+
 }

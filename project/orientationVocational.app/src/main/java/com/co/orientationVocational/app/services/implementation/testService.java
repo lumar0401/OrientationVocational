@@ -96,7 +96,7 @@ public class testService implements testRepository{
 	}
 
 	@Override
-	public LinkedList<String> testPreviosUsuario(String identificacion) {
+	public LinkedList<String> testPreviosUsuario(String identificacion, String test) {
 		LinkedList<String> historicoTest = new LinkedList<String>();		
 		StringBuilder sSql = new StringBuilder();
 		PreparedStatement pStm = null;
@@ -105,6 +105,7 @@ public class testService implements testRepository{
 		try {
 			sSql.append(" SELECT respuestas FROM test ")
 		    .append(" WHERE identificacion_usuario = ? ")
+		    .append(" AND tipo_test = ? ")
 		    .append(" ORDER BY fecha_test DESC ")
 		    .append(" LIMIT 5 ");
 			
@@ -113,6 +114,7 @@ public class testService implements testRepository{
 			int i = 1;
 			
 			pStm.setObject(i++, identificacion.toString());
+			pStm.setObject(i++, test.toString());
 			
 			rSet = pStm.executeQuery();
 			

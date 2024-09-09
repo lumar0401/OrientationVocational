@@ -200,7 +200,7 @@ public class testChaside extends utils {
 		
 		String resultadoCorrelacion = "";
 		
-		LinkedList<String> busquedadTest = testservice.testPreviosUsuario(identificacion);
+		LinkedList<String> busquedadTest = testservice.testPreviosUsuario(identificacion, "Test Chaside");
 		
 		if(busquedadTest.size() < 1) {
 			return "analysis completed";

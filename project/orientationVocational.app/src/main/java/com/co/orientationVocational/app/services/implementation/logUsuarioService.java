@@ -425,4 +425,10 @@ public class logUsuarioService extends utils implements logUsuarioRepository, mo
 		
 		return registro;
 	}
+
+	@Override
+	public ByteArrayInputStream exportAllDataPDF(String identificacion) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

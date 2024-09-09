@@ -153,7 +153,7 @@ public class authController extends utils {
             Date expiration = jwtprovider.getExpirationDateToken(jwt);
 			String expirationISO = jwtprovider.getExpirationDateTokenISO(jwt);
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            jwtDto jwtDto = new jwtDto(jwt, userDetails.getUsername(), expiration.toString(), expirationISO, userDetails.getAuthorities());
+            jwtDto jwtDto = new jwtDto(jwt, userDetails.getUsername(), expiration.toString(), expirationISO.toString(), userDetails.getAuthorities());
             return new ResponseEntity(jwtDto, HttpStatus.OK);
         } catch (BadCredentialsException e) {
         	return new ResponseEntity(new Mensajes("Contraseña Incorrecta"), HttpStatus.NOT_FOUND);

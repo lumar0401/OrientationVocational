@@ -241,7 +241,7 @@ public class testHolland extends utils {
 		
 		String resultadoCorrelacion = "";
 		
-		LinkedList<String> busquedadTest = testservice.testPreviosUsuario(identificacion);
+		LinkedList<String> busquedadTest = testservice.testPreviosUsuario(identificacion, "Test Holland");
 		
 		if(busquedadTest.size() < 1) {
 			return "analysis completed";
